@@ -9,8 +9,8 @@ use Core;
 class Controller extends BlockController
 {
     protected $btTable = 'btRepeatableElement';
-    protected $btInterfaceWidth = "1280";
-    protected $btInterfaceHeight = "850";
+    protected $btInterfaceWidth = "992";
+    protected $btInterfaceHeight = "650";
     protected $btWrapperClass = "ccm-ui";
     protected $btIgnorePageThemeGridFrameworkContainer = true;
 

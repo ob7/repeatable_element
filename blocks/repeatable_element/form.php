@@ -54,7 +54,6 @@
 
      // Add item button
      $('.add-repeatable-element-entry').click(function() {
-         var thisModal = $(this).closest('.ui-dialog-content');
          var currentEntries = document.getElementsByClassName('repeatable-element-entry').length + 1;
          entriesContainer.append(entriesTemplate({
              title: '',
@@ -71,7 +70,13 @@
              thisEditButton.text(thisEditButton.data('itemEditText'));
          });
          newSlide.removeClass('item-closed').find('.edit-repeatable-element-entry').text(closeText);
-         thisModal.scrollTop(newSlide.offset().top);
+         var thisModal = $(this).closest('.ui-dialog-content');
+         var modalHeight = thisModal.find('.ccm-ui').height();
+         var scrollPosition = modalHeight;
+         $(thisModal).animate({ scrollTop: scrollPosition }, "slow");
+
+         var editAll = $('.edit-all-items');
+         editAll.text(editAll.data('expandText'));
          doSortCount();
      });
 
