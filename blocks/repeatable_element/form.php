@@ -19,7 +19,9 @@
     <div class="repeatable-element-entry item-closed">
         <div class="repeatable-element-entry-row">
             <!--Item # Title -->
-            <h4>Item #<span class="item-number"><%=item_number%></span></h4>
+            <div class="repeatable-element-entry-row-title">
+                <h4>Item #<span class="item-number"><%=item_number%></span></h4> :: <p>(<%=title%>)</p>
+            </div>
             <!-- Item Controls -->
             <div class="repeatable-element-entry-controls">
                 <!-- Delete Button -->
@@ -70,13 +72,17 @@
              thisEditButton.text(thisEditButton.data('itemEditText'));
          });
          newSlide.removeClass('item-closed').find('.edit-repeatable-element-entry').text(closeText);
+
+         //Move to newest added item
          var thisModal = $(this).closest('.ui-dialog-content');
          var modalHeight = thisModal.find('.ccm-ui').height();
          var scrollPosition = modalHeight;
          $(thisModal).animate({ scrollTop: scrollPosition }, "slow");
 
+         // Ensure edit all button is toggled to original state
          var editAll = $('.edit-all-items');
          editAll.text(editAll.data('expandText'));
+
          doSortCount();
      });
 
@@ -92,7 +98,7 @@
      var doSortCount = function() {
          $('.repeatable-element-entry').each(function(index) {
              $(this).find('.repeatable-element-entry-sort').val(index);
-             $(this).find('.item-number').html(index+1);
+             $(this).find('.item-number').html(index+1); // item_number simply gives each item a number in the form for user reference, it does not save to database
          });
      };
 
@@ -173,5 +179,11 @@
      border-bottom: 1px solid #E3E3E3;
      padding-bottom: 10px;
      margin-bottom: 16px;
+ }
+ .repeatable-element-entry-row-title h4 {
+     display: inline-block;
+ }
+ .repeatable-element-entry-row-title p {
+     display: inline-block;
  }
 </style>
