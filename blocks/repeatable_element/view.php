@@ -6,7 +6,6 @@ if ($c->isEditMode()) { ?>
     </div>
 <?php } else { ?>
     <div class="repeatable-element-container">
-        view
         <?php if(count($items) > 0) { ?>
             <?php foreach($items as $item) {?>
                 <?php if($item['title']) { ?>
