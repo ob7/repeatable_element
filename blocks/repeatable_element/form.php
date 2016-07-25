@@ -5,7 +5,7 @@
         <button type="button" data-expand-text="Expand All" data-collapse-text="Collapse All" class="btn btn-default edit-all-items"><?=t('Expand All')?></button>
     </div>
     <div class="repeatable-element-entries">
-        <!-- REPEATABLE DYNAMIC ELEMENT ITEMS WILL BE LOADED INTO HERE -->
+        <!-- REPEATABLE DYNAMIC ELEMENT ITEMS WILL BE APPENDED INTO HERE -->
     </div>
     <div>
         <button type="button" class="btn btn-success add-repeatable-element-entry"> <?=t('Add Item')?> </button>
@@ -14,7 +14,7 @@
 
 
 
-<!-- THE TEMPLATE WE'LL USE FOR EACH ITEM -->
+<!-- THE TEMPLATE USED FOR EACH ITEM -->
 <script type="text/template" id="entryTemplate">
     <div class="repeatable-element-entry item-closed">
         <div class="repeatable-element-entry-row">
@@ -113,7 +113,7 @@
          }
      });
 
-     // Load items
+     // Initial load up of already saved items
      <?php if($items) {
          $itemNumber = 1;
          foreach ($items as $item) { ?>
