@@ -31,7 +31,9 @@ class Controller extends BlockController
     public function edit()
     {
         $db = Database::connection();
-        $query = $db->GetAll('SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+		$q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
+		$query = $db->fetchAll($q, array($this->bID));
+        //$query = $db->GetAll('SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder', array($this->bID));
         $this->set('items', $query);
     }
 
@@ -50,7 +52,9 @@ class Controller extends BlockController
     public function getEntries()
     {
         $db = Database::connection();
-        $rows = $db->GetAll('SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+		$q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
+		$rows = $db->fetchAll($q, array($this->bID));
+        //$rows = $db->GetAll('SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder', array($this->bID));
         $items = array();
         foreach ($rows as $row) {
             $items[] = $row;
