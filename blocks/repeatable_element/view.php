@@ -6,11 +6,14 @@ if ($c->isEditMode()) { ?>
     </div>
 <?php } else { ?>
     <div class="repeatable-element-container">
+        view
         <?php if(count($items) > 0) { ?>
-            <?php if($item['title']) { ?>
-                <p>
-                    <?=$item['title']?>
-                </p>
+            <?php foreach($items as $item) {?>
+                <?php if($item['title']) { ?>
+                    <p>
+                        <?=$item['title']?>
+                    </p>
+                <?php } ?>
             <?php } ?>
         <?php } else { ?>
         <div class="ccm-repeatable-item-placeholder">
