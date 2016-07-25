@@ -25,7 +25,7 @@ class Controller extends Package
         $pkg = parent::install();
         $bt = BlockType::getByHandle('repeatable_element');
         if (!is_object($bt)) {
-            BlockType::installBlockTypeFromPackage('repeatable_element', $pkg);
+            $bt = BlockType::installBlockType('repeatable_element', $pkg);
         }
     }
 
