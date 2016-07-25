@@ -28,6 +28,9 @@
                 <button type="button" class="btn btn-danger remove-repeatable-element-entry"> <?=t('Delete')?> </button>
                 <!-- Edit Button -->
                 <button type="button" class="btn btn-default edit-repeatable-element-entry" data-item-close-text="<?=t('Collapse Item')?>" data-item-edit-text="<?=t('Edit Item')?>"><?=t('Edit Item');?></button>
+
+                <!-- Move item button-->
+                <i class="fa fa-arrows"></i>
             </div>
         </div>
 
@@ -93,6 +96,17 @@
              doSortCount();
          });
      };
+
+     // Move item
+     $('.repeatable-element-entries').sortable({
+         placeholder: "ui-state-highlight",
+         axis: "y",
+         handle: "i.fa-arrows",
+         cursor: "move",
+         update: function() {
+             doSortCount();
+         }
+     });
 
      // Sort items
      var doSortCount = function() {
@@ -185,5 +199,22 @@
  }
  .repeatable-element-entry-row-title p {
      display: inline-block;
+ }
+ .repeatable-element-entries i:hover {
+     color: #428bca;
+ }
+ .repeatable-element-entries i.fa-arrows {
+     padding: 5px;
+     font-size: 20px;
+     cursor: move;
+ }
+ .repeatable-element-entries .ui-state-highlight {
+     height: 94px;
+     margin-bottom: 15px;
+ }
+ .repeatable-element-entries .ui-sortable-helper {
+     -webkit-box-shadow: 0px 10px 18px 2px rgba(54,55,66,0.27);
+     -moz-box-shadow: 0px 10px 18px 2px rgba(54,55,66,0.27);
+     box-shadow: 0px 10px 18px 2px rgba(54,55,66,0.27);
  }
 </style>
