@@ -33,7 +33,6 @@ class Controller extends BlockController
         $db = Database::connection();
 		$q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
 		$query = $db->fetchAll($q, array($this->bID));
-        //$query = $db->GetAll('SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder', array($this->bID));
         $this->set('items', $query);
     }
 
@@ -54,7 +53,6 @@ class Controller extends BlockController
         $db = Database::connection();
 		$q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
 		$rows = $db->fetchAll($q, array($this->bID));
-        //$rows = $db->GetAll('SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder', array($this->bID));
         $items = array();
         foreach ($rows as $row) {
             $items[] = $row;
@@ -66,21 +64,22 @@ class Controller extends BlockController
     public function save($data)
     {
         $db = Database::connection();
-        $db->execute('DELETE from btRepeatableItem WHERE bID = ?', array($this->bID));
+		$q = 'DELETE from btRepeatableItem WHERE bID = ?';
+		$db->executeQuery($q, array($this->bID));
         parent::save($data);
         if (isset($data['sortOrder'])) {
             $count = count($data['sortOrder']);
             $i = 0;
 
             while ($i < $count) {
-                $title = $data['title'][$i];
-                $db->execute('INSERT INTO btRepeatableItem (bID, title, sortOrder) values(?,?,?)',
-                    array(
+				$q = 'INSERT INTO btRepeatableItem (bID, title, sortOrder) values(?,?,?)';
+				$db->executeQuery($q,
+					array(
                         $this->bID,
                         $data['title'][$i],
                         $data['sortOrder'][$i],
-                    )
-                );
+					)
+				);
                 ++$i;
             }
         }
