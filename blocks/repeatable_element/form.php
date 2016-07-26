@@ -1,17 +1,33 @@
-<?php defined('C5_EXECUTE') or die("Access Denied.");?>
+<?php defined('C5_EXECUTE') or die("Access Denied.");
 
-<div class="repeatable-elements-container">
-    <div class="repeatable-elements-controls">
-        <button type="button" data-expand-text="Expand All" data-collapse-text="Collapse All" class="btn btn-default edit-all-items"><?=t('Expand All')?></button>
-    </div>
-    <div class="repeatable-element-entries">
-        <!-- REPEATABLE DYNAMIC ELEMENT ITEMS WILL BE APPENDED INTO HERE -->
-    </div>
-    <div>
-        <button type="button" class="btn btn-success add-repeatable-element-entry"> <?=t('Add Item')?> </button>
+echo Core::make('helper/concrete/ui')->tabs(array(
+    array('items', t('Items'), true),
+    array('options', t('Options'))
+));
+
+?>
+
+<div class="ccm-tab-content" id="ccm-tab-content-items">
+    <div class="repeatable-elements-container">
+        <div class="repeatable-elements-controls">
+            <button type="button" data-expand-text="Expand All" data-collapse-text="Collapse All" class="btn btn-default edit-all-items"><?=t('Expand All')?></button>
+        </div>
+        <div class="repeatable-element-entries">
+            <!-- REPEATABLE DYNAMIC ELEMENT ITEMS WILL BE APPENDED INTO HERE -->
+        </div>
+        <div>
+            <button type="button" class="btn btn-success add-repeatable-element-entry"> <?=t('Add Item')?> </button>
+        </div>
     </div>
 </div>
 
+<div class="ccm-tab-content" id="ccm-tab-content-options">
+    <label class="control-label"><?=t('Enable Images');?></label>
+    <select name="enableImage" id="toggleImage">
+        <option <?=$enableImage == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
+        <option <?=$enableImage == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
+    </select>
+</div>
 
 
 <!-- THE TEMPLATE USED FOR EACH ITEM -->
@@ -30,7 +46,7 @@
                 <button type="button" class="btn btn-default edit-repeatable-element-entry" data-item-close-text="<?=t('Collapse Details')?>" data-item-edit-text="<?=t('Edit Details')?>"><?=t('Edit Details');?></button>
 
                 <!-- Edit Image-->
-                <div class="form-group">
+                <div class="form-group enable-image <%=enable_image > 0 ? '' : 'disabled' %>">
                     <label><?=t('Image');?></label>
                     <div class="repeatable-element-image">
                         <% if(image_url.length > 0) { %>
@@ -40,8 +56,7 @@
                         <% } %>
                     </div>
                     <input name="<?=$view->field('fID')?>[]" type="hidden" class="repeatable-element-fID" value="<%=fID%>"/>
-                </div>
-
+                </div> 
                 <!-- Move item button-->
                 <i class="fa fa-arrows"></i>
             </div>
@@ -70,6 +85,18 @@
      var entriesContainer = $('.repeatable-element-entries');
      var entriesTemplate = _.template($('#entryTemplate').html());
 
+     var enable_image = <?=$enableImage?>;
+
+     // Toggle images
+     $('#toggleImage').click(function() {
+         var enableImage = $('#toggleImage option:selected').val();
+         console.log("Image toggled value is " + enableImage);
+         if (enableImage == 0) {
+             $('.form-group.enable-image').addClass("disabled");
+         } else if (enableImage == 1) {
+             $('.form-group.enable-image').removeClass("disabled");
+         }
+     });
      // Add item button
      $('.add-repeatable-element-entry').click(function() {
          var currentEntries = document.getElementsByClassName('repeatable-element-entry').length + 1;
@@ -78,7 +105,8 @@
              fID: '',
              image_url: '',
              sort_order: '',
-             item_number: currentEntries
+             item_number: currentEntries,
+             enable_image: enable_image
          }));
 
          var newSlide = $('.repeatable-element-entry').last();
@@ -171,7 +199,8 @@
                  image_url: '',
                  <?php } ?>
                  sort_order: '<?=$item['sortOrder']?>',
-                 item_number: '<?=$itemNumber?>'
+                 item_number: '<?=$itemNumber?>',
+                 enable_image: '<?=$enableImage?>'
              }));
         <?php
             ++$itemNumber;
@@ -279,6 +308,9 @@
  }
  .repeatable-element-entry-controls .form-group {
      margin-left: 10px;
+ }
+ .form-group.disabled {
+     display: none;
  }
  @media only screen and (min-width: 992px) {
      .repeatable-element-entry-controls {

@@ -8,6 +8,10 @@
       <unsigned/>
       <key/>
     </field>
+    <field name="enableImage" type="integer">
+      <unsigned/>
+      <default value="0"/>
+    </field>
   </table>
 
   <table name="btRepeatableItem">
