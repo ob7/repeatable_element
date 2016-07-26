@@ -26,13 +26,15 @@ class Controller extends BlockController
 
     public function add()
     {
+        $this->requireAsset('core/file-manager');
     }
 
     public function edit()
     {
+        $this->requireAsset('core/file-manager');
         $db = Database::connection();
-		$q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
-		$query = $db->fetchAll($q, array($this->bID));
+        $q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
+        $query = $db->fetchAll($q, array($this->bID));
         $this->set('items', $query);
     }
 
@@ -51,8 +53,8 @@ class Controller extends BlockController
     public function getEntries()
     {
         $db = Database::connection();
-		$q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
-		$rows = $db->fetchAll($q, array($this->bID));
+        $q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
+        $rows = $db->fetchAll($q, array($this->bID));
         $items = array();
         foreach ($rows as $row) {
             $items[] = $row;
@@ -64,22 +66,23 @@ class Controller extends BlockController
     public function save($data)
     {
         $db = Database::connection();
-		$q = 'DELETE from btRepeatableItem WHERE bID = ?';
-		$db->executeQuery($q, array($this->bID));
+        $q = 'DELETE from btRepeatableItem WHERE bID = ?';
+        $db->executeQuery($q, array($this->bID));
         parent::save($data);
         if (isset($data['sortOrder'])) {
             $count = count($data['sortOrder']);
             $i = 0;
 
             while ($i < $count) {
-				$q = 'INSERT INTO btRepeatableItem (bID, title, sortOrder) values(?,?,?)';
-				$db->executeQuery($q,
-					array(
+                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, sortOrder) values(?,?,?,?)';
+                $db->executeQuery($q,
+                    array(
                         $this->bID,
+                        intval($data['fID'][$i]),
                         $data['title'][$i],
                         $data['sortOrder'][$i],
-					)
-				);
+                    )
+                );
                 ++$i;
             }
         }

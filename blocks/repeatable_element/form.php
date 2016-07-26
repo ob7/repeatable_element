@@ -27,7 +27,20 @@
                 <!-- Delete Button -->
                 <button type="button" class="btn btn-danger remove-repeatable-element-entry"> <?=t('Delete')?> </button>
                 <!-- Edit Button -->
-                <button type="button" class="btn btn-default edit-repeatable-element-entry" data-item-close-text="<?=t('Collapse Item')?>" data-item-edit-text="<?=t('Edit Item')?>"><?=t('Edit Item');?></button>
+                <button type="button" class="btn btn-default edit-repeatable-element-entry" data-item-close-text="<?=t('Collapse Details')?>" data-item-edit-text="<?=t('Edit Details')?>"><?=t('Edit Details');?></button>
+
+                <!-- Edit Image-->
+                <div class="form-group">
+                    <label><?=t('Image');?></label>
+                    <div class="repeatable-element-image">
+                        <% if(image_url.length > 0) { %>
+                        <img src="<%=image_url%>"/>
+                        <% } else { %>
+                        <i class="fa fa-picture-o"></i>
+                        <% } %>
+                    </div>
+                    <input name="<?=$view->field('fID')?>[]" type="hidden" class="repeatable-element-fID" value="<%=fID%>"/>
+                </div>
 
                 <!-- Move item button-->
                 <i class="fa fa-arrows"></i>
@@ -62,12 +75,15 @@
          var currentEntries = document.getElementsByClassName('repeatable-element-entry').length + 1;
          entriesContainer.append(entriesTemplate({
              title: '',
+             fID: '',
+             image_url: '',
              sort_order: '',
              item_number: currentEntries
          }));
 
          var newSlide = $('.repeatable-element-entry').last();
          attachDelete(newSlide.find('.remove-repeatable-element-entry'));
+         attachFileManagerLaunch(newSlide.find('.repeatable-element-image'));
          var closeText = newSlide.find('.edit-repeatable-element-entry').data('itemCloseText');
          $('.repeatable-element-entry').not('.item-closed').each(function() {
              $(this).addClass('item-closed');
@@ -88,6 +104,21 @@
 
          doSortCount();
      });
+
+     // Image selector
+     var attachFileManagerLaunch = function($obj) {
+         $obj.click(function() {
+             var oldLauncher = $(this);
+             ConcreteFileManager.launchDialog(function(data) {
+                 ConcreteFileManager.getFileDetails(data.fID, function(r) {
+                     jQuery.fn.dialog.hideLoader();
+                     var file = r.files[0];
+                     oldLauncher.html(file.resultsThumbnailImg);
+                     oldLauncher.next('.repeatable-element-fID').val(file.fID);
+                 });
+             });
+         });
+     }
 
      // Remove item function
      var attachDelete = function($obj) {
@@ -133,6 +164,12 @@
          foreach ($items as $item) { ?>
              entriesContainer.append(entriesTemplate({
                  title: '<?=$item['title']?>',
+                 fID: '<?=$item['fID']?>',
+                 <?php if (File::getByID($item['fID'])) { ?>
+                 image_url: '<?php echo File::getByID($item['fID'])->getThumbnailURL('file_manager_listing');?>',
+                 <?php } else { ?>
+                 image_url: '',
+                 <?php } ?>
                  sort_order: '<?=$item['sortOrder']?>',
                  item_number: '<?=$itemNumber?>'
              }));
@@ -142,6 +179,7 @@
      } ?>
 
      attachDelete($('.remove-repeatable-element-entry'));
+     attachFileManagerLaunch($('.repeatable-element-image'));
      doSortCount();
 
  });
@@ -200,6 +238,9 @@
  .repeatable-element-entry-row-title p {
      display: inline-block;
  }
+ .repeatable-element-entries i {
+     transition: all .5s ease-in-out;
+ }
  .repeatable-element-entries i:hover {
      color: #428bca;
  }
@@ -216,5 +257,37 @@
      -webkit-box-shadow: 0px 10px 18px 2px rgba(54,55,66,0.27);
      -moz-box-shadow: 0px 10px 18px 2px rgba(54,55,66,0.27);
      box-shadow: 0px 10px 18px 2px rgba(54,55,66,0.27);
+ }
+ .repeatable-element-image {
+        padding: 5px;
+        cursor: pointer;
+        background: #dedede;
+        border: 1px solid #cdcdcd;
+        text-align: center;
+        vertical-align: middle;
+        width: 72px;
+        height: 72px;
+        display: table-cell;
+ }
+ .repeatable-element-image:hover i.fa  {
+     color: #428bca;
+ }
+ .repeatable-element-entry-controls {
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+ }
+ .repeatable-element-entry-controls .form-group {
+     margin-left: 10px;
+ }
+ @media only screen and (min-width: 992px) {
+     .repeatable-element-entry-controls {
+         width: 30%;
+         min-width: 320px;
+         justify-content: space-between;
+     }
+     .repeatable-element-entry-controls .form-group {
+         margin-left: 0;
+     }
  }
 </style>
