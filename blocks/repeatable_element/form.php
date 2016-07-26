@@ -85,7 +85,11 @@ echo Core::make('helper/concrete/ui')->tabs(array(
      var entriesContainer = $('.repeatable-element-entries');
      var entriesTemplate = _.template($('#entryTemplate').html());
 
+     <?php if ($enableImage) {  ?>
      var enable_image = <?=$enableImage?>;
+     <? } else { ?>
+     var enable_image = 0;
+     <?php } ?>
 
      // Toggle images
      $('#toggleImage').click(function() {
@@ -93,10 +97,13 @@ echo Core::make('helper/concrete/ui')->tabs(array(
          console.log("Image toggled value is " + enableImage);
          if (enableImage == 0) {
              $('.form-group.enable-image').addClass("disabled");
+             enable_image = 0;
          } else if (enableImage == 1) {
              $('.form-group.enable-image').removeClass("disabled");
+             enable_image = 1;
          }
      });
+
      // Add item button
      $('.add-repeatable-element-entry').click(function() {
          var currentEntries = document.getElementsByClassName('repeatable-element-entry').length + 1;
@@ -175,7 +182,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
          });
      };
 
-     // Edit slide button
+     // Edit item button
      $('.repeatable-element-entries').on('click','.edit-repeatable-element-entry', function() {
          $(this).closest('.repeatable-element-entry').toggleClass('item-closed');
          var thisEditButton = $(this).closest('.repeatable-element-entry').find('.edit-repeatable-element-entry');
@@ -200,7 +207,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
                  <?php } ?>
                  sort_order: '<?=$item['sortOrder']?>',
                  item_number: '<?=$itemNumber?>',
-                 enable_image: '<?=$enableImage?>'
+                 enable_image: <?=$enableImage?>
              }));
         <?php
             ++$itemNumber;
