@@ -17,8 +17,8 @@ if ($c->isEditMode()) { ?>
                 $f = File::getByID($item['fID']);
                 if (is_object($f)) {
                     $tag = Core::make('html/image', array($f, false))->getTag();
+                    echo $tag;
                 }
-                echo $tag;
                 ?>
             <?php } ?>
         <?php } else { ?>
