@@ -13,6 +13,7 @@ class Controller extends BlockController
     protected $btInterfaceHeight = "650";
     protected $btWrapperClass = "ccm-ui";
     protected $btIgnorePageThemeGridFrameworkContainer = true;
+    protected $btDefaultSet = 'basic';
 
     public function getBlockTypeName()
     {
