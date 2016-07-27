@@ -66,6 +66,8 @@ class Controller extends BlockController
     public function save($data)
     {
         $data['enableImage'] = intval($data['enableImage']);
+        $data['cropImage'] = intval($data['cropImage']);
+        $data['crop'] = intval($data['crop']);
         $db = Database::connection();
         $q = 'DELETE from btRepeatableItem WHERE bID = ?';
         $db->executeQuery($q, array($this->bID));

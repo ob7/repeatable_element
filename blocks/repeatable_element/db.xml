@@ -12,6 +12,21 @@
       <unsigned/>
       <default value="0"/>
     </field>
+    <field name="cropImage" type="integer">
+      <unsigned/>
+      <default value="0"/>
+    </field>
+    <field name="cropWidth" type="integer">
+      <unsigned/>
+    </field>
+    <field name="cropHeight" type="integer">
+      <unsigned/>
+    </field>
+    <field name="crop" type="boolean">
+      <unsigned/>
+      <default value="0"/>
+      <notnull/>
+    </field>
   </table>
 
   <table name="btRepeatableItem">

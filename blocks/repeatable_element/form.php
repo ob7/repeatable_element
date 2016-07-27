@@ -22,11 +22,29 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 </div>
 
 <div class="ccm-tab-content" id="ccm-tab-content-options">
-    <label class="control-label"><?=t('Enable Images');?></label>
+    <label class="control-label"><?=t('Enable Images?');?></label>
     <select name="enableImage" id="toggleImage">
         <option <?=$enableImage == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
         <option <?=$enableImage == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
     </select>
+    <div class="crop-images">
+        <label class="control-label"><?=t('Resize Images?');?></label>
+        <select name="cropImage" id="cropImage">
+            <option <?=$cropImage == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
+            <option <?=$cropImage == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
+        </select>
+        <label class="control-label"><?=t('Width');?></label>
+        <input name="cropWidth" type="text" value="<?=$cropWidth?>"/>
+
+        <label class="control-label"><?=t('Height');?></label>
+        <input name="cropHeight" type="text" value="<?=$cropHeight?>"/>
+
+        <label class="control-label"><?=t('Crop to dimensions?');?></label>
+        <select name="crop">
+            <option <?php $crop == 0 ? 'selected' : ''?> value="0">No</option>
+            <option <?php $crop == 1 ? 'selected' : ''?> value="1">Yes</option>
+        </select>
+    </div>
 </div>
 
 
