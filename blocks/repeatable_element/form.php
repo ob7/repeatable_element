@@ -6,10 +6,10 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 ));
 
 if(!$cropWidth) {
-    $cropWidth = 0;
+    $cropWidth = 200;
 }
 if(!$cropHeight) {
-    $cropHeight = 0;
+    $cropHeight = 200;
 }
 ?>
 
