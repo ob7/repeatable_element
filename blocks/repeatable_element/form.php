@@ -2,7 +2,8 @@
 
 echo Core::make('helper/concrete/ui')->tabs(array(
     array('items', t('Items'), true),
-    array('options', t('Options'))
+    array('options', t('Options')),
+    array('layouts', t('Layout'))
 ));
 
 if(!$cropWidth) {
@@ -67,6 +68,12 @@ if(!$cropHeight) {
         </div>
     </div>
 </div>
+<div class="ccm-tab-content" id="ccm-tab-content-layouts">
+	<div class="layout-item">
+		<label class="control-label"><?=t('Locations')?></label>
+	</div>
+</div>
+
 <script>
  $('.option-box select.top-option').click(function() {
      value = $(this).find('option:selected').val();
@@ -130,6 +137,18 @@ if(!$cropHeight) {
                 <label><?=t('Title');?></label>
                 <input class="form-control" name="<?=$view->field('title'); ?>[]" type="text" value="<%=title%>" />
             </div>
+            <div data-option="location" class="toggable-option">
+                <label><?=t('Location')?></label>
+                <hr/>
+                <div class="form-group">
+                    <label><?=t('Address Line #1')?></label>
+                    <input class="form-control" name="<?=$addressLine1?>[]" type="text" value="<%=address_line1%>"/>
+                </div>
+                <div class="form-group">
+                    <label><?=t('Address Line #2')?></label>
+                    <input class="form-control" name="<?=$addressLine2?>[]" type="text" value="<%=address_line2%>"/>
+                </div>
+            </div>
             <!--Sort Order-->
             <input class="repeatable-element-entry-sort" name="<?=$view->field('sortOrder');?>[]" type="hidden" value="<%=sort_order%>"/>
         </div>
@@ -154,7 +173,9 @@ if(!$cropHeight) {
              image_url: '',
              sort_order: '',
              item_number: currentEntries,
-             enable_image: enable_image
+             enable_image: enable_image,
+             address_line1: '',
+             address_line2: ''
          }));
 
          var newSlide = $('.repeatable-element-entry').last();
@@ -248,7 +269,9 @@ if(!$cropHeight) {
                  <?php } ?>
                  sort_order: '<?=$item['sortOrder']?>',
                  item_number: '<?=$itemNumber?>',
-                 enable_image: <?=$enableImage?>
+                 enable_image: <?=$enableImage?>,
+                 address_line1: <?=$addressLine1?>,
+                 address_line2: <?=$addressLine2?>
              }));
         <?php
             ++$itemNumber;
@@ -418,5 +441,12 @@ if(!$cropHeight) {
  }
  .option-button {
      margin-left: 10px !important;
+ }
+ .layout-item {
+     padding: 16px;
+     border-radius: 4px;
+     background: #F5F5F5;
+     border: 1px solid #E3E3E3;
+     margin-bottom: 10px;
  }
 </style>

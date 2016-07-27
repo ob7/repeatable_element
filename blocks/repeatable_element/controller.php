@@ -85,13 +85,19 @@ class Controller extends BlockController
             $i = 0;
 
             while ($i < $count) {
-                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, sortOrder) values(?,?,?,?)';
+                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, sortOrder, addressLine1, addressLine2, city, state, zip, country) values(?,?,?,?,?,?,?,?,?,?)';
                 $db->executeQuery($q,
                     array(
                         $this->bID,
                         intval($data['fID'][$i]),
                         $data['title'][$i],
                         $data['sortOrder'][$i],
+                        $data['addressLine1'][$i],
+                        $data['addressLine2'][$i],
+                        $data['city'][$i],
+                        $data['state'][$i],
+                        $data['zip'][$i],
+                        $data['country'][$i]
                     )
                 );
                 ++$i;

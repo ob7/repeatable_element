@@ -56,6 +56,13 @@
     </field>
     <field name="title" type="text"/>
     <field name="sortOrder" type="integer"/>
+
+    <field name="addressLine1" type="text"/>
+    <field name="addressLine2" type="text"/>
+    <field name="city" type="string"/>
+    <field name="state" type="string"/>
+    <field name="zip" type="string"/>
+    <field name="country" type="string"/>
   </table>
 
 </schema>
