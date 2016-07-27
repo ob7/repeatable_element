@@ -32,7 +32,7 @@ if(!$displayTitle) {
 
 <div class="ccm-tab-content" id="ccm-tab-content-options">
     <label class="control-label"><?=t('Display Title?');?></label>
-    <div class="option-box" data-option=".display-title"">
+    <div class="option-box" data-option=".display-title">
         <select class="form-control" name="displayTitle">
             <option <?=$displayTitle == 0 ? 'selected' : '';?> value="0"><?=t('No')?></option>
             <option <?=$displayTitle == 1 ? 'selected' : '';?> value="1"><?=t('Yes')?></option>
