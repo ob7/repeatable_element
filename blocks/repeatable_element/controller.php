@@ -27,6 +27,11 @@ class Controller extends BlockController
     public function add()
     {
         $this->requireAsset('core/file-manager');
+
+        if(!$this->displayTitle) {
+            $displayTitle = 1;
+        }
+        $this->set('displayTitle', $displayTitle);
     }
 
     public function edit()
@@ -36,6 +41,7 @@ class Controller extends BlockController
         $q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
         $query = $db->fetchAll($q, array($this->bID));
         $this->set('items', $query);
+
     }
 
     public function view()

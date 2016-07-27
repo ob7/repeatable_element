@@ -29,9 +29,10 @@
       <default value="0"/>
       <notnull/>
     </field>
-    <field name="displayTitle" type="integer">
+    <field name="displayTitle" type="boolean">
       <unsigned/>
       <default value="1"/>
+      <notnull/>
     </field>
   </table>
 

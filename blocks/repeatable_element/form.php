@@ -8,11 +8,8 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 if(!$cropWidth) {
     $cropWidth = 0;
 }
-if(!$croHeight) {
+if(!$cropHeight) {
     $cropHeight = 0;
-}
-if(!$displayTitle) {
-    $displayTitle = 1;
 }
 ?>
 
