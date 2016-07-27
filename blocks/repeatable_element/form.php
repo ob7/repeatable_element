@@ -27,23 +27,25 @@ echo Core::make('helper/concrete/ui')->tabs(array(
         <option <?=$enableImage == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
         <option <?=$enableImage == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
     </select>
-    <div class="crop-images">
+    <div class="image-options <?=$enableImage == 0 || !$enableImage ? 'disabled' : ''; ?>">
         <label class="control-label"><?=t('Resize Images?');?></label>
-        <select name="cropImage" id="cropImage">
+        <select name="cropImage" id="toggleCrop">
             <option <?=$cropImage == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
             <option <?=$cropImage == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
         </select>
-        <label class="control-label"><?=t('Width');?></label>
-        <input name="cropWidth" type="text" value="<?=$cropWidth?>"/>
+        <div class="crop-options <?=$cropImage == 0 ? 'disabled' : ''?>">
+            <label class="control-label"><?=t('Width');?></label>
+            <input name="cropWidth" type="text" value="<?=$cropWidth?>"/>
 
-        <label class="control-label"><?=t('Height');?></label>
-        <input name="cropHeight" type="text" value="<?=$cropHeight?>"/>
+            <label class="control-label"><?=t('Height');?></label>
+            <input name="cropHeight" type="text" value="<?=$cropHeight?>"/>
 
-        <label class="control-label"><?=t('Crop to dimensions?');?></label>
-        <select name="crop">
-            <option <?php $crop == 0 ? 'selected' : ''?> value="0">No</option>
-            <option <?php $crop == 1 ? 'selected' : ''?> value="1">Yes</option>
-        </select>
+            <label class="control-label"><?=t('Crop to dimensions?');?></label>
+            <select name="crop">
+                <option <?=$crop ? '' : 'selected'?> value="0">No</option>
+                <option <?=$crop ? 'selected' : ''?> value="1">Yes</option>
+            </select>
+        </div>
     </div>
 </div>
 
@@ -102,25 +104,6 @@ echo Core::make('helper/concrete/ui')->tabs(array(
  $(document).ready(function() {
      var entriesContainer = $('.repeatable-element-entries');
      var entriesTemplate = _.template($('#entryTemplate').html());
-
-     <?php if ($enableImage) {  ?>
-     var enable_image = <?=$enableImage?>;
-     <? } else { ?>
-     var enable_image = 0;
-     <?php } ?>
-
-     // Toggle images
-     $('#toggleImage').click(function() {
-         var enableImage = $('#toggleImage option:selected').val();
-         console.log("Image toggled value is " + enableImage);
-         if (enableImage == 0) {
-             $('.form-group.enable-image').addClass("disabled");
-             enable_image = 0;
-         } else if (enableImage == 1) {
-             $('.form-group.enable-image').removeClass("disabled");
-             enable_image = 1;
-         }
-     });
 
      // Add item button
      $('.add-repeatable-element-entry').click(function() {
@@ -254,6 +237,38 @@ echo Core::make('helper/concrete/ui')->tabs(array(
              $('.edit-repeatable-element-entry').text(editText);
          };
      });
+
+ // Enable or disable elements
+     <?php if ($enableImage) {  ?>
+     var enable_image = <?=$enableImage?>;
+     <? } else { ?>
+     var enable_image = 0;
+     <?php } ?>
+
+     // Toggle images
+     $('#toggleImage').click(function() {
+         var enableImage = $('#toggleImage option:selected').val();
+         console.log("Image toggled value is " + enableImage);
+         if (enableImage == 0) {
+             $('.form-group.enable-image').addClass("disabled");
+             $('.image-options').addClass("disabled");
+             enable_image = 0;
+         } else if (enableImage == 1) {
+             $('.form-group.enable-image').removeClass("disabled");
+             $('.image-options').removeClass("disabled");
+             enable_image = 1;
+         }
+     });
+
+     // Toggle crop
+     $('#toggleCrop').click(function() {
+         var enableCrop = $('#toggleCrop option:selected').val();
+         if (enableCrop == 0) {
+             $('.crop-options').addClass("disabled");
+         } else if (enableCrop == 1) {
+             $('.crop-options').removeClass("disabled");
+         }
+     });
 </script>
 
 
@@ -335,6 +350,12 @@ echo Core::make('helper/concrete/ui')->tabs(array(
      margin-left: 10px;
  }
  .form-group.disabled {
+     display: none;
+ }
+ .image-options.disabled {
+     display: none;
+ }
+ .crop-options.disabled {
      display: none;
  }
  @media only screen and (min-width: 992px) {
