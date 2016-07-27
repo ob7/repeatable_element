@@ -5,6 +5,15 @@ echo Core::make('helper/concrete/ui')->tabs(array(
     array('options', t('Options'))
 ));
 
+if(!$cropWidth) {
+    $cropWidth = 0;
+}
+if(!$croHeight) {
+    $cropHeight = 0;
+}
+if(!$displayTitle) {
+    $displayTitle = 1;
+}
 ?>
 
 <div class="ccm-tab-content" id="ccm-tab-content-items">
@@ -22,32 +31,66 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 </div>
 
 <div class="ccm-tab-content" id="ccm-tab-content-options">
-    <label class="control-label"><?=t('Enable Images?');?></label>
-    <select name="enableImage" id="toggleImage">
-        <option <?=$enableImage == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
-        <option <?=$enableImage == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
-    </select>
-    <div class="image-options <?=$enableImage == 0 || !$enableImage ? 'disabled' : ''; ?>">
-        <label class="control-label"><?=t('Resize Images?');?></label>
-        <select name="cropImage" id="toggleCrop">
-            <option <?=$cropImage == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
-            <option <?=$cropImage == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
+    <label class="control-label"><?=t('Display Title?');?></label>
+    <div class="option-box" data-option=".display-title"">
+        <select class="form-control" name="displayTitle">
+            <option <?=$displayTitle == 0 ? 'selected' : '';?> value="0"><?=t('No')?></option>
+            <option <?=$displayTitle == 1 ? 'selected' : '';?> value="1"><?=t('Yes')?></option>
         </select>
-        <div class="crop-options <?=$cropImage == 0 ? 'disabled' : ''?>">
-            <label class="control-label"><?=t('Width');?></label>
-            <input name="cropWidth" type="text" value="<?=$cropWidth?>"/>
-
-            <label class="control-label"><?=t('Height');?></label>
-            <input name="cropHeight" type="text" value="<?=$cropHeight?>"/>
-
-            <label class="control-label"><?=t('Crop to dimensions?');?></label>
-            <select name="crop">
-                <option <?=$crop ? '' : 'selected'?> value="0">No</option>
-                <option <?=$crop ? 'selected' : ''?> value="1">Yes</option>
+    </div>
+    <label class="control-label"><?=t('Enable Images?');?></label>
+    <div class="option-box" data-option=".enable-image">
+        <div class="option-box-row">
+            <select class="form-control top-option" name="enableImage" id="toggleImage">
+                <option <?=$enableImage == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
+                <option <?=$enableImage == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
             </select>
+            <button type="button" class="btn btn-default option-button <?=$enableImage == 0 ? 'disabled' : '';?>">Options</button>
+        </div>
+        <div class="option-box-options image-options <?=$enableImage == 0 || !$enableImage ? 'disabled' : 'disabled'; ?>">
+            <hr/>
+            <label class="control-label"><?=t('Resize Images?');?></label>
+            <select class="form-control" name="cropImage" id="toggleCrop">
+                <option <?=$cropImage == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
+                <option <?=$cropImage == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
+            </select>
+            <div class="crop-options <?=$cropImage == 0 ? 'disabled' : ''?>">
+                <label class="control-label"><?=t('Width');?></label>
+                <input class="form-control" name="cropWidth" type="text" value="<?=$cropWidth?>"/>
+
+                <label class="control-label"><?=t('Height');?></label>
+                <input class="form-control" name="cropHeight" type="text" value="<?=$cropHeight?>"/>
+
+                <label class="control-label"><?=t('Crop to dimensions?');?></label>
+                <select class="form-control" name="crop">
+                    <option <?=$crop ? '' : 'selected'?> value="0">No</option>
+                    <option <?=$crop ? 'selected' : ''?> value="1">Yes</option>
+                </select>
+            </div>
         </div>
     </div>
 </div>
+<script>
+ $('.option-box select.top-option').click(function() {
+     value = $(this).find('option:selected').val();
+     item = $(this).parent().parent().data('option');
+     console.log("ITEM IS " + item);
+     if (value == 1) {
+         $(this).parent().find('button').removeClass('disabled');
+         $(item).removeClass("disabled");
+         /* $(this).parent().parent().find('.option-box-options').removeClass('disabled');*/
+     } else if (value == 0) {
+         $(this).parent().find('button').addClass("disabled");
+         $(item).addClass("disabled");
+         $(this).parent().parent().find('.option-box-options').addClass('disabled');
+     }
+     console.log("VALUE IS " + value);
+ });
+ $(".option-button").click(function() {
+     $(this).parent().parent().find('.option-box-options').toggleClass("disabled");
+ });
+
+</script>
 
 
 <!-- THE TEMPLATE USED FOR EACH ITEM -->
@@ -245,31 +288,27 @@ echo Core::make('helper/concrete/ui')->tabs(array(
      var enable_image = 0;
      <?php } ?>
 
-     // Toggle images
-     $('#toggleImage').click(function() {
-         var enableImage = $('#toggleImage option:selected').val();
-         console.log("Image toggled value is " + enableImage);
-         if (enableImage == 0) {
-             $('.form-group.enable-image').addClass("disabled");
-             $('.image-options').addClass("disabled");
-             enable_image = 0;
-         } else if (enableImage == 1) {
-             $('.form-group.enable-image').removeClass("disabled");
-             $('.image-options').removeClass("disabled");
-             enable_image = 1;
-         }
-     });
+// Toggle images
+ $('#toggleImage').click(function() {
+     var enableImage = $('#toggleImage option:selected').val();
+     console.log("Image toggled value is " + enableImage);
+     if (enableImage == 0) {
+         enable_image = 0;
+     } else if (enableImage == 1) {
+         enable_image = 1;
+     }
+ });
 
-     // Toggle crop
-     $('#toggleCrop').click(function() {
-         var enableCrop = $('#toggleCrop option:selected').val();
-         if (enableCrop == 0) {
-             $('.crop-options').addClass("disabled");
-         } else if (enableCrop == 1) {
-             $('.crop-options').removeClass("disabled");
-         }
-     });
-</script>
+// Toggle crop
+ $('#toggleCrop').click(function() {
+     var enableCrop = $('#toggleCrop option:selected').val();
+     if (enableCrop == 0) {
+         $('.crop-options').addClass("disabled");
+     } else if (enableCrop == 1) {
+         $('.crop-options').removeClass("disabled");
+     }
+ });
+ </script>
 
 
 <!-- FORM STYLES -->
@@ -367,5 +406,20 @@ echo Core::make('helper/concrete/ui')->tabs(array(
      .repeatable-element-entry-controls .form-group {
          margin-left: 0;
      }
+ }
+
+ .option-box {
+     padding: 16px;
+     border-radius: 4px;
+     background: #F5F5F5;
+     border: 1px solid #E3E3E3;
+     margin-bottom: 10px;
+ }
+ .option-box-row {
+     display: flex;
+     flex-row;
+ }
+ .option-button {
+     margin-left: 10px !important;
  }
 </style>
