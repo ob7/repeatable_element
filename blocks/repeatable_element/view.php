@@ -11,7 +11,7 @@ if ($c->isEditMode()) { ?>
     <div class="repeatable-element-container">
         <?php if(count($items) > 0) { ?>
             <?php foreach($items as $item) {?>
-                <?php if($item['title']) { ?>
+                <?php if($item['title'] && $displayTitle == 1) { ?>
                     <p>
                         <?=$item['title']?>
                     </p>
@@ -32,10 +32,6 @@ if ($c->isEditMode()) { ?>
                 }
                 ?>
             <?php } ?>
-            <p> crop image is: <br> <?=$cropImage?> </p>
-            <p> crop width is: <br> <?=$cropWidth?> </p>
-            <p> crop height is: <br> <?=$cropHeight?> </p>
-            <p> crop to size is: <br> <?=$crop?> </p>
         <?php } else { ?>
         <div class="ccm-repeatable-item-placeholder">
             <p><?=t('No Repeatable Items Entered.'); ?></p>
