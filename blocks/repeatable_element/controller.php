@@ -65,6 +65,7 @@ class Controller extends BlockController
 
     public function save($data)
     {
+        $data['displayTitle'] = intval($data['displayTitle']);
         $data['enableImage'] = intval($data['enableImage']);
         $data['cropImage'] = intval($data['cropImage']);
         $data['crop'] = intval($data['crop']);
