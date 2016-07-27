@@ -25,6 +25,10 @@ class Controller extends BlockController
         return t('Repeatable Dynamic Items Starter Block');
     }
 
+    // add block duplicate function
+
+    //
+    
     public function add()
     {
         $this->requireAsset('core/file-manager');

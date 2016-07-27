@@ -133,20 +133,39 @@ if(!$cropHeight) {
         <div class="repeatable-element-entry-content">
             <hr/>
             <!-- Title -->
-            <div class="form-group">
-                <label><?=t('Title');?></label>
-                <input class="form-control" name="<?=$view->field('title'); ?>[]" type="text" value="<%=title%>" />
+            <div class="item-data-area">
+                <div class="form-group">
+                    <label class="control-label"><?=t('Title');?></label>
+                    <input class="form-control" name="<?=$view->field('title'); ?>[]" type="text" value="<%=title%>" />
+                </div>
+
             </div>
-            <div data-option="location" class="toggable-option">
-                <label><?=t('Location')?></label>
+            <div data-option="location" class="item-data-area">
+                <label class="control-label"><?=t('Location')?></label>
                 <hr/>
                 <div class="form-group">
                     <label><?=t('Address Line #1')?></label>
-                    <input class="form-control" name="<?=$addressLine1?>[]" type="text" value="<%=address_line1%>"/>
+                    <input class="form-control" name="<?=$view->field('addressLine1')?>[]" type="text" value="<%=address_line1%>"/>
                 </div>
                 <div class="form-group">
                     <label><?=t('Address Line #2')?></label>
-                    <input class="form-control" name="<?=$addressLine2?>[]" type="text" value="<%=address_line2%>"/>
+                    <input class="form-control" name="<?=$view->field('addressLine2')?>[]" type="text" value="<%=address_line2%>"/>
+                </div>
+                <div class="form-group">
+                    <label><?=t('City')?></label>
+                    <input class="form-control" name="<?=$view->field('city')?>[]" type="text" value="<%=city%>"/>
+                </div>
+                <div class="form-group">
+                    <label><?=t('State')?></label>
+                    <input class="form-control" name="<?=$view->field('state')?>[]" type="text" value="<%=state%>"/>
+                </div>
+                <div class="form-group">
+                    <label><?=t('Zip')?></label>
+                    <input class="form-control" name="<?=$view->field('zip')?>[]" type="text" value="<%=zip%>"/>
+                </div>
+                <div class="form-group">
+                    <label><?=t('Country')?></label>
+                    <input class="form-control" name="<?=$view->field('country')?>[]" type="text" value="<%=country%>"/>
                 </div>
             </div>
             <!--Sort Order-->
@@ -175,7 +194,11 @@ if(!$cropHeight) {
              item_number: currentEntries,
              enable_image: enable_image,
              address_line1: '',
-             address_line2: ''
+             address_line2: '',
+             city: '',
+             state: '',
+             zip: '',
+             country: ''
          }));
 
          var newSlide = $('.repeatable-element-entry').last();
@@ -270,8 +293,13 @@ if(!$cropHeight) {
                  sort_order: '<?=$item['sortOrder']?>',
                  item_number: '<?=$itemNumber?>',
                  enable_image: <?=$enableImage?>,
-                 address_line1: <?=$addressLine1?>,
-                 address_line2: <?=$addressLine2?>
+                 address_line1: '<?=$item['addressLine1']?>',
+                 address_line2: '<?=$item['addressLine2']?>',
+                 city: '<?=$item['city']?>',
+                 state: '<?=$item['state']?>',
+                 zip: '<?=$item['zip']?>',
+                 country: '<?=$item['country']?>'
+
              }));
         <?php
             ++$itemNumber;
@@ -447,6 +475,25 @@ if(!$cropHeight) {
      border-radius: 4px;
      background: #F5F5F5;
      border: 1px solid #E3E3E3;
+     margin-bottom: 10px;
+ }
+ .item-data-area {
+     background-color: #110B14;
+     background-color: #202020;
+     color: #CCC;
+     padding: 10px;
+     margin-bottom: 10px;
+     border-radius: 10px;
+     border: 1px solid #ABCEFD;
+ }
+ .item-data-area label.control-label{
+     color: #B8E9CB;
+     color: #ABCEFD;
+     font-size: 20px;
+ }
+ .item-data-area hr {
+     border-color: #ADCEFD;
+     margin-top: 10px;
      margin-bottom: 10px;
  }
 </style>
