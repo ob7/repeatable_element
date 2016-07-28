@@ -67,6 +67,13 @@ if(!$cropHeight) {
             </div>
         </div>
     </div>
+    <div class="option-box" data-option=".location-item-form">
+        <label class="control-label"><?=t('Enable Locations?');?></label>
+        <select id="toggleLocations" class="form-control top-option" name="enableLocations">
+            <option <?=$enableLocations == 0 ? 'selected' : '';?> value="0"><?=t('No')?></option>
+            <option <?=$enableLocations == 1 ? 'selected' : '';?> value="1"><?=t('Yes')?></option>
+        </select>
+    </div>
 </div>
 <div class="ccm-tab-content" id="ccm-tab-content-layouts">
 	<div class="layout-item">
@@ -77,16 +84,15 @@ if(!$cropHeight) {
 <script>
  $('.option-box select.top-option').click(function() {
      value = $(this).find('option:selected').val();
-     item = $(this).parent().parent().data('option');
+     item = $(this).closest('.option-box').data('option');
      console.log("ITEM IS " + item);
      if (value == 1) {
-         $(this).parent().find('button').removeClass('disabled');
-         $(item).removeClass("disabled");
-         /* $(this).parent().parent().find('.option-box-options').removeClass('disabled');*/
+         $(this).closest('.option-box').find('button').removeClass('disabled');
+         $(item).show();
      } else if (value == 0) {
          $(this).parent().find('button').addClass("disabled");
-         $(item).addClass("disabled");
-         $(this).parent().parent().find('.option-box-options').addClass('disabled');
+         $(item).hide();
+         $(this).closest('.option-box').find('.option-box-options').addClass('disabled');
      }
      console.log("VALUE IS " + value);
  });
@@ -123,7 +129,7 @@ if(!$cropHeight) {
                         <% } %>
                     </div>
                     <input name="<?=$view->field('fID')?>[]" type="hidden" class="repeatable-element-fID" value="<%=fID%>"/>
-                </div> 
+                </div>
                 <!-- Move item button-->
                 <i class="fa fa-arrows"></i>
             </div>
@@ -138,9 +144,8 @@ if(!$cropHeight) {
                     <label class="control-label"><?=t('Title');?></label>
                     <input class="form-control" name="<?=$view->field('title'); ?>[]" type="text" value="<%=title%>" />
                 </div>
-
             </div>
-            <div data-option="location" class="item-data-area">
+            <div style="<%=enable_locations > 0 ? '' : 'display: none;'%>" data-option="location" class="item-data-area location-item-form">
                 <label class="control-label"><?=t('Location')?></label>
                 <hr/>
                 <div class="form-group">
@@ -198,7 +203,8 @@ if(!$cropHeight) {
              city: '',
              state: '',
              zip: '',
-             country: ''
+            country: '',
+            enable_locations: location_enable,
          }));
 
          var newSlide = $('.repeatable-element-entry').last();
@@ -293,13 +299,13 @@ if(!$cropHeight) {
                  sort_order: '<?=$item['sortOrder']?>',
                  item_number: '<?=$itemNumber?>',
                  enable_image: <?=$enableImage?>,
+                 enable_locations: <?=$enableLocations?>,
                  address_line1: '<?=$item['addressLine1']?>',
                  address_line2: '<?=$item['addressLine2']?>',
                  city: '<?=$item['city']?>',
                  state: '<?=$item['state']?>',
                  zip: '<?=$item['zip']?>',
-                 country: '<?=$item['country']?>'
-
+                 country: '<?=$item['country']?>',
              }));
         <?php
             ++$itemNumber;
@@ -344,6 +350,23 @@ if(!$cropHeight) {
          enable_image = 0;
      } else if (enableImage == 1) {
          enable_image = 1;
+     }
+ });
+// Toggle locations
+ <?php if ($enableLocations > 0) {?>
+    var location_enable = <?=$enableLocations?>;
+ <?php } else { ?>
+  var location_enable = 0;
+ <?php } ?>
+ $('#toggleLocations').click(function() {
+     var enableImage = $('#toggleLocations option:selected').val();
+     console.log("Image toggled value is " + enableImage);
+     if (enableImage == 0) {
+         enable_image = 0;
+        location_enable = 0;
+     } else if (enableImage == 1) {
+         enable_image = 1;
+        location_enable = 1;
      }
  });
 
