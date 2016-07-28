@@ -5,8 +5,8 @@ use Concrete\Core\Block\BlockController;
 use Database;
 use Page;
 use Core;
-
 class Controller extends BlockController
+
 {
     protected $btTable = 'btRepeatableElement';
     protected $btInterfaceWidth = "992";
@@ -28,7 +28,7 @@ class Controller extends BlockController
     // add block duplicate function
 
     //
-    
+
     public function add()
     {
         $this->requireAsset('core/file-manager');
@@ -74,6 +74,44 @@ class Controller extends BlockController
         return $items;
     }
 
+	// function to geocode address, it will return false if unable to geocode address
+	public function geocode($address){
+		// url encode the address
+		$address = urlencode($address);
+		// google map geocode api url
+		$url = "http://maps.google.com/maps/api/geocode/json?address={$address}";
+		// get the json response
+		$resp_json = file_get_contents($url);
+		// decode the json
+		$resp = json_decode($resp_json, true);
+		// response status will be 'OK', if able to geocode given address 
+		if($resp['status']=='OK'){
+			// get the important data
+			$lati = $resp['results'][0]['geometry']['location']['lat'];
+			$longi = $resp['results'][0]['geometry']['location']['lng'];
+			$formatted_address = $resp['results'][0]['formatted_address'];
+			// verify if data is complete
+			if($lati && $longi && $formatted_address){
+				// put the data in the array
+				$data_arr = array();
+				array_push(
+					$data_arr,
+						$lati,
+						$longi,
+						$formatted_address
+					);
+				
+				return $data_arr;
+			
+			}else{
+				return false;
+			}
+		
+		}else{
+			return false;
+		}
+	}
+
     public function save($data)
     {
         $data['displayTitle'] = intval($data['displayTitle']);
@@ -89,7 +127,17 @@ class Controller extends BlockController
             $i = 0;
 
             while ($i < $count) {
-                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, sortOrder, addressLine1, addressLine2, city, state, zip, country) values(?,?,?,?,?,?,?,?,?,?)';
+                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, sortOrder, addressLine1, addressLine2, city, state, zip, country, lat, lng) values(?,?,?,?,?,?,?,?,?,?,?,?)';
+
+				//if (!$data['lat'][$i] <= 0 || $data['lng'][$i] <= 0) {
+					$address = $data['addressLine1'][$i] . ', ' . $data['addressLine2'][$i] . ', ' . $data['city'][$i] . ', ' . $data['state'][$i] . ', ' . $data['zip'][$i] . ', ' . $data['country'][$i];
+					$addressLocation = $this->geocode($address);
+					$lat = $addressLocation[0];
+					$lng = $addressLocation[1];
+				//} else {
+					//$lat = 0;
+					//$lng = 0;
+				//}
                 $db->executeQuery($q,
                     array(
                         $this->bID,
@@ -101,7 +149,9 @@ class Controller extends BlockController
                         $data['city'][$i],
                         $data['state'][$i],
                         $data['zip'][$i],
-                        $data['country'][$i]
+                        $data['country'][$i],
+						$lat,
+						$lng
                     )
                 );
                 ++$i;

@@ -63,6 +63,16 @@
     <field name="state" type="string"/>
     <field name="zip" type="string"/>
     <field name="country" type="string"/>
+
+	<field name="lat" type="string">
+		<unsigned/>
+		<default value="0"/>
+	</field>
+    <field name="lng" type="string">
+		<unsigned/>
+		<default value="0"/>
+	</field>
+    <field name="fulladdress" type="text"/>
   </table>
 
 </schema>

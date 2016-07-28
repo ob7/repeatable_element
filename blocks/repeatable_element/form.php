@@ -31,7 +31,7 @@ if(!$cropHeight) {
 <div class="ccm-tab-content" id="ccm-tab-content-options">
     <label class="control-label"><?=t('Display Title?');?></label>
     <div class="option-box" data-option=".display-title">
-        <select class="form-control" name="displayTitle">
+        <select id="toggleTitle" class="form-control" name="displayTitle">
             <option <?=$displayTitle == 0 ? 'selected' : '';?> value="0"><?=t('No')?></option>
             <option <?=$displayTitle == 1 ? 'selected' : '';?> value="1"><?=t('Yes')?></option>
         </select>
@@ -139,7 +139,7 @@ if(!$cropHeight) {
         <div class="repeatable-element-entry-content">
             <hr/>
             <!-- Title -->
-            <div class="item-data-area">
+            <div style="<%=display_title > 0 ? '' : 'display:none;' %>" class="item-data-area title-item-form">
                 <div class="form-group">
                     <label class="control-label"><?=t('Title');?></label>
                     <input class="form-control" name="<?=$view->field('title'); ?>[]" type="text" value="<%=title%>" />
@@ -171,6 +171,9 @@ if(!$cropHeight) {
                 <div class="form-group">
                     <label><?=t('Country')?></label>
                     <input class="form-control" name="<?=$view->field('country')?>[]" type="text" value="<%=country%>"/>
+
+                    <input name="<?=$view->field('lat')?>[]" type="hidden" value="<%=lat%>"/>
+                    <input name="<?=$view->field('lng')?>[]" type="hidden" value="<%=lat%>"/>
                 </div>
             </div>
             <!--Sort Order-->
@@ -205,6 +208,9 @@ if(!$cropHeight) {
              zip: '',
             country: '',
             enable_locations: location_enable,
+            display_title: title_display,
+             lat: '',
+            lng: '',
          }));
 
          var newSlide = $('.repeatable-element-entry').last();
@@ -305,7 +311,10 @@ if(!$cropHeight) {
                  city: '<?=$item['city']?>',
                  state: '<?=$item['state']?>',
                  zip: '<?=$item['zip']?>',
-                 country: '<?=$item['country']?>',
+				 country: '<?=$item['country']?>',
+				 display_title: <?=$displayTitle?>,
+				 lat: '<?=$item['lat']?>',
+				 lng: '<?=$item['lng']?>'
              }));
         <?php
             ++$itemNumber;
@@ -342,6 +351,15 @@ if(!$cropHeight) {
      var enable_image = 0;
      <?php } ?>
 
+     <?php if ($displayTitle == 1) {  ?>
+     var title_display = 1
+     <? } else if ($displayTitle == 0) { ?>
+     var title_display = 0;
+     <?php } ?>
+     console.log("TITLE DISPLAY IS " + title_display);
+     console.log("DISPLAY TITLE IS <?=$displayTitle?>");
+
+
 // Toggle images
  $('#toggleImage').click(function() {
      var enableImage = $('#toggleImage option:selected').val();
@@ -352,6 +370,18 @@ if(!$cropHeight) {
          enable_image = 1;
      }
  });
+// Toggle title
+ $('#toggleTitle').click(function() {
+     var displayTitle = $('#toggleTitle option:selected').val();
+     var itemForm = $('.title-item-form');
+     if (displayTitle == 0) {
+         title_display = 0;
+        $(itemForm).hide();
+     } else if (displayTitle == 1) {
+         title_display = 1;
+        $(itemForm).show();
+     }
+ });
 // Toggle locations
  <?php if ($enableLocations > 0) {?>
     var location_enable = <?=$enableLocations?>;
@@ -359,13 +389,10 @@ if(!$cropHeight) {
   var location_enable = 0;
  <?php } ?>
  $('#toggleLocations').click(function() {
-     var enableImage = $('#toggleLocations option:selected').val();
-     console.log("Image toggled value is " + enableImage);
-     if (enableImage == 0) {
-         enable_image = 0;
+     var enableLocations = $('#toggleLocations option:selected').val();
+     if (enableLocations == 0) {
         location_enable = 0;
-     } else if (enableImage == 1) {
-         enable_image = 1;
+     } else if (enableLocations == 1) {
         location_enable = 1;
      }
  });
