@@ -35,8 +35,14 @@ class Controller extends Package
 		$al->register(
 		'javascript', 'googleMapsAPI', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC_eOliAR35peqAtdN6NquzIMQinPqwx5Q&callback=initMap', array('local' => false)
 		);
+
+		$al->register(
+			'javascript', 'gmapsjs', 'blocks/repeatable_element/vendor/hpneo/gmaps.js', array(), 'repeatable_element'
+		);
+
 		$al->registerGroup('googleMapsAPI',array(
 			array('javascript','googleMapsAPI'),
+			array('javascript','gmapsjs'),
 		));
 	}
 
