@@ -127,13 +127,14 @@ class Controller extends BlockController
             $i = 0;
 
             while ($i < $count) {
-                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, sortOrder, addressLine1, addressLine2, city, state, zip, country, lat, lng) values(?,?,?,?,?,?,?,?,?,?,?,?)';
+                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, sortOrder, addressLine1, addressLine2, city, state, zip, country, lat, lng, fullAddress) values(?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
 				//if (!$data['lat'][$i] <= 0 || $data['lng'][$i] <= 0) {
 					$address = $data['addressLine1'][$i] . ', ' . $data['addressLine2'][$i] . ', ' . $data['city'][$i] . ', ' . $data['state'][$i] . ', ' . $data['zip'][$i] . ', ' . $data['country'][$i];
 					$addressLocation = $this->geocode($address);
 					$lat = $addressLocation[0];
 					$lng = $addressLocation[1];
+					$fullAddress = $addressLocation[2];
 				//} else {
 					//$lat = 0;
 					//$lng = 0;
@@ -151,7 +152,8 @@ class Controller extends BlockController
                         $data['zip'][$i],
                         $data['country'][$i],
 						$lat,
-						$lng
+						$lng,
+						$fullAddress
                     )
                 );
                 ++$i;

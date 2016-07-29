@@ -77,7 +77,13 @@ if(!$cropHeight) {
 </div>
 <div class="ccm-tab-content" id="ccm-tab-content-layouts">
 	<div class="layout-item">
-		<label class="control-label"><?=t('Locations')?></label>
+		<h4><?=t('Locations Layout')?></h4>
+		<hr>
+		<label class="control-label"><?=t('Location List Position')?></label>
+		<select class="form-control" id="toggleLayoutLocations" name="layoutLocations">
+			<option <?=$layoutLocations == 'none' ? 'selected' : ''?> value="none">None</option>
+			<option <?=$layoutLocations == 'left' ? 'selected' : ''?> value="left">Left Layout</option>
+		</select>
 	</div>
 </div>
 
