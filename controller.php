@@ -29,4 +29,15 @@ class Controller extends Package
         }
     }
 
+	public function on_start()
+	{
+		$al = \Concrete\Core\Asset\AssetList::getInstance();
+		$al->register(
+		'javascript', 'googleMapsAPI', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC_eOliAR35peqAtdN6NquzIMQinPqwx5Q&callback=initMap', array('local' => false)
+		);
+		$al->registerGroup('googleMapsAPI',array(
+			array('javascript','googleMapsAPI'),
+		));
+	}
+
 }

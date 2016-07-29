@@ -52,6 +52,11 @@ if ($c->isEditMode()) { ?>
 			</li>
 				<?php } ?>
 		</ul>
+		<script>
+function initMap() {
+	console.log("MAP INITILAIZED");
+}
+		</script>
 	</div>
 	<? } else { ?>
     <div class="repeatable-element-container">

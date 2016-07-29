@@ -54,6 +54,13 @@ class Controller extends BlockController
         $this->set('items', $this->getEntries());
     }
 
+	public function on_start()
+	{
+		if($this->enableLocations > 0) {
+			$this->requireAsset('googleMapsAPI');
+		}
+	}
+
     public function delete()
     {
         $db = Database::connection();
