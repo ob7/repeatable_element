@@ -14,40 +14,55 @@ if ($c->isEditMode()) { ?>
 <?php } else { ?>
     <div class="repeatable-element-container cycle-slideshow-container">
         <?php if(count($items) > 0) { ?>
-            <ul class="cycle-slideshow" data-cycle-slides="li"
+            <ul class="cycle-slideshow"
+                data-cycle-slides="li"
+                data-cycle-pager=".pager"
+                data-cycle-auto-height="container"
                 <?php if($image) {?>
                 style="background-image: url('<?=$image->src?>');"
                 <?php } ?>
             >
             <?php foreach($items as $item) {?>
                 <li>
-                    <div class="image">
-                        <?php
-                        $f = File::getByID($item['fID']);
-                        if (is_object($f) && $enableImage == 1) {
-                            if ($cropImage == 1) {
-                                $width = $cropWidth;
-                                $height = $cropHeight;
-                                $crop = $crop;
-                                $image = $ih->getThumbnail($f, $width, $height, $crop);
-                                echo '<img src="' . $image->src . '">';
-                            } else if ($cropImage == 0) {
-                                $tag = Core::make('html/image', array($f, false))->getTag();
-                                echo $tag;
-                            }
-                        }
-                        ?>
+                    <div class="content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-xs-12 col-lg-6">
+                                    <div class="image">
+                                        <?php
+                                        $f = File::getByID($item['fID']);
+                                        if (is_object($f) && $enableImage == 1) {
+                                            if ($cropImage == 1) {
+                                                $width = $cropWidth;
+                                                $height = $cropHeight;
+                                                $crop = $crop;
+                                                $image = $ih->getThumbnail($f, $width, $height, $crop);
+                                                echo '<img src="' . $image->src . '">';
+                                            } else if ($cropImage == 0) {
+                                                $tag = Core::make('html/image', array($f, false))->getTag();
+                                                echo $tag;
+                                            }
+                                        }
+                                ?>
+                            </div>
+                                </div>
+                                <div class="col-xs-12 col-lg-6">
+                                    <?php if($item['title'] && $displayTitle == 1) { ?>
+                                        <h1>
+                                            <?=$item['title']?>
+                                        </h1>
+                                    <?php } ?>
+                                    <?php if ($item['description']) {?>
+                                        <div class="description">
+                                            <?=$item['description']?>
+                                        </div>
+                                    <?php } ?>
+                                    <div class="pager">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                <?php if($item['title'] && $displayTitle == 1) { ?>
-                    <h1>
-                        <?=$item['title']?>
-                    </h1>
-                <?php } ?>
-                <?php if ($item['description']) {?>
-                    <div class="description">
-                        <?=$item['description']?>
-                    </div>
-                <?php } ?>
                 </li>
             <?php } ?>
             </ul>
