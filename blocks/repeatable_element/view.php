@@ -8,30 +8,41 @@ if ($c->isEditMode()) { ?>
         <div style="padding: 40px 0px 40px 0px"><?php echo t('Repeatable Element view disabled in edit mode.')?></div>
     </div>
 <?php } else { ?>
-    <div class="repeatable-element-container">
+    <div class="repeatable-element-container cycle-slideshow-container">
         <?php if(count($items) > 0) { ?>
+            <ul class="cycle-slideshow" data-cycle-slides="li">
             <?php foreach($items as $item) {?>
+                <li>
+                    <div class="image">
+                        <?php
+                        $f = File::getByID($item['fID']);
+                        if (is_object($f) && $enableImage == 1) {
+                            if ($cropImage == 1) {
+                                $width = $cropWidth;
+                                $height = $cropHeight;
+                                $crop = $crop;
+                                $image = $ih->getThumbnail($f, $width, $height, $crop);
+                                echo '<img src="' . $image->src . '">';
+                            } else if ($cropImage == 0) {
+                                $tag = Core::make('html/image', array($f, false))->getTag();
+                                echo $tag;
+                            }
+                        }
+                        ?>
+                    </div>
                 <?php if($item['title'] && $displayTitle == 1) { ?>
-                    <p>
+                    <h1>
                         <?=$item['title']?>
-                    </p>
+                    </h1>
                 <?php } ?>
-                <?php
-                $f = File::getByID($item['fID']);
-                if (is_object($f) && $enableImage == 1) {
-                    if ($cropImage == 1) {
-                        $width = $cropWidth;
-                        $height = $cropHeight;
-                        $crop = $crop;
-                        $image = $ih->getThumbnail($f, $width, $height, $crop);
-                        echo '<img src="' . $image->src . '">';
-                    } else if ($cropImage == 0) {
-                        $tag = Core::make('html/image', array($f, false))->getTag();
-                        echo $tag;
-                    }
-                }
-                ?>
+                <?php if ($item['description']) {?>
+                    <div class="description">
+                        <?=$item['description']?>
+                    </div>
+                <?php } ?>
+                </li>
             <?php } ?>
+            </ul>
         <?php } else { ?>
         <div class="ccm-repeatable-item-placeholder">
             <p><?=t('No Repeatable Items Entered.'); ?></p>

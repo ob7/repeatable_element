@@ -76,6 +76,12 @@ class Controller extends BlockController
         return $items;
     }
 
+    public function on_start()
+    {
+        $this->requireAsset('cycle2');
+    }
+
+
     public function save($data)
     {
         $data['displayTitle'] = intval($data['displayTitle']);
