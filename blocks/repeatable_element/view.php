@@ -3,6 +3,10 @@ $c = Page::getCurrentPage();
 if ($cropImage == 1) {
     $ih = Core::make('helper/image');
 }
+if ($sf > 0) {
+    $ih = Core::make('helper/image');
+    $image = $ih->getThumbnail($sf, 1920, 9999, false);
+}
 if ($c->isEditMode()) { ?>
     <div class="ccm-edit-mode-disabled-item" style="<?php echo isset($width) ? "width: $width;" : '' ?><?php echo isset($height) ? "height: $height;" : '' ?>">
         <div style="padding: 40px 0px 40px 0px"><?php echo t('Repeatable Element view disabled in edit mode.')?></div>
@@ -10,7 +14,11 @@ if ($c->isEditMode()) { ?>
 <?php } else { ?>
     <div class="repeatable-element-container cycle-slideshow-container">
         <?php if(count($items) > 0) { ?>
-            <ul class="cycle-slideshow" data-cycle-slides="li">
+            <ul class="cycle-slideshow" data-cycle-slides="li"
+                <?php if($image) {?>
+                style="background-image: url('<?=$image->src?>');"
+                <?php } ?>
+            >
             <?php foreach($items as $item) {?>
                 <li>
                     <div class="image">

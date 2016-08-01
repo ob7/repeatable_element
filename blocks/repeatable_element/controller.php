@@ -6,6 +6,7 @@ use Database;
 use Page;
 use Concrete\Core\Editor\LinkAbstractor;
 use Core;
+use File;
 
 class Controller extends BlockController
 {
@@ -31,6 +32,7 @@ class Controller extends BlockController
         $this->requireAsset('core/file-manager');
         $this->requireAsset('core/sitemap');
         $this->requireAsset('redactor');
+        $this->set('bf', null);
 
         if(!$this->displayTitle) {
             $displayTitle = 1;
@@ -48,11 +50,30 @@ class Controller extends BlockController
         $query = $db->fetchAll($q, array($this->bID));
         $this->set('items', $query);
 
+        $bf = null;
+        if ($this->getFileID() > 0) {
+            $bf = $this->getFileObject();
+        }
+        $this->set('bf', $bf);
+    }
+
+    public function getFileID()
+    {
+        return $this->sfID;
+    }
+
+    public function getFileObject()
+    {
+        return File::getByID($this->sfID);
     }
 
     public function view()
     {
         $this->set('items', $this->getEntries());
+
+        $sf = File::getByID($this->sfID);
+        $this->set('sf', $sf);
+
     }
 
     public function delete()

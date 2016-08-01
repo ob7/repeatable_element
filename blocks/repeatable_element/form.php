@@ -2,6 +2,7 @@
 
 $fp = FilePermissions::getGlobal();
 $tp = new TaskPermission();
+$al = Core::make('helper/concrete/asset_library');
 
 echo Core::make('helper/concrete/ui')->tabs(array(
     array('items', t('Items'), true),
@@ -38,6 +39,13 @@ if(!$cropHeight) {
             <option <?=$displayTitle == 1 ? 'selected' : '';?> value="1"><?=t('Yes')?></option>
         </select>
     </div>
+    <label class="control-label"><?=t('Static Image');?></label>
+    <div class="option-box" data-option=".static-image">
+        <div class="form-group">
+            <?=$al->image('ccm-b-image', 'sfID', t('Choose Image'), $bf);?>
+        </div>
+    </div>
+
     <label class="control-label"><?=t('Enable Images?');?></label>
     <div class="option-box" data-option=".enable-image">
         <div class="option-box-row">
