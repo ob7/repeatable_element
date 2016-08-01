@@ -1,5 +1,8 @@
 <?php defined('C5_EXECUTE') or die("Access Denied.");
 
+$fp = FilePermissions::getGlobal();
+$tp = new TaskPermission();
+
 echo Core::make('helper/concrete/ui')->tabs(array(
     array('items', t('Items'), true),
     array('options', t('Options'))
@@ -117,6 +120,7 @@ if(!$cropHeight) {
                     </div>
                     <input name="<?=$view->field('fID')?>[]" type="hidden" class="repeatable-element-fID" value="<%=fID%>"/>
                 </div> 
+
                 <!-- Move item button-->
                 <i class="fa fa-arrows"></i>
             </div>
@@ -130,6 +134,15 @@ if(!$cropHeight) {
                 <label><?=t('Title');?></label>
                 <input class="form-control" name="<?=$view->field('title'); ?>[]" type="text" value="<%=title%>" />
             </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label><?=t('Description');?></label>
+                <div class="redactor-edit-content">
+                    <textarea style="display: none;" class="redactor-content" name="<?=$view->field('description');?>[]"><%=description%></textarea>
+                </div>
+            </div>
+
             <!--Sort Order-->
             <input class="repeatable-element-entry-sort" name="<?=$view->field('sortOrder');?>[]" type="hidden" value="<%=sort_order%>"/>
         </div>
@@ -141,7 +154,9 @@ if(!$cropHeight) {
 
 <!--FORM FUNCTIONALITY-->
 <script>
+ var CCM_EDITOR_SECURITY_TOKEN = "<?php echo Core::make('helper/validation/token')->generate('editor'); ?>";
  $(document).ready(function() {
+     var ccmReceivingEntry = '';
      var entriesContainer = $('.repeatable-element-entries');
      var entriesTemplate = _.template($('#entryTemplate').html());
 
@@ -152,6 +167,7 @@ if(!$cropHeight) {
              title: '',
              fID: '',
              image_url: '',
+             description: '',
              sort_order: '',
              item_number: currentEntries,
              enable_image: enable_image
@@ -167,6 +183,14 @@ if(!$cropHeight) {
              thisEditButton.text(thisEditButton.data('itemEditText'));
          });
          newSlide.removeClass('item-closed').find('.edit-repeatable-element-entry').text(closeText);
+         newSlide.find('.redactor-content').redactor({
+             minHeight: 200,
+             'concrete5': {
+                 filemanager: <?=$fp->canAccessFileManager();?>,
+                 sitemap: <?=$tp->canAccessSitemap();?>,
+                 lightbox: true
+             }
+         });
 
          //Move to newest added item
          var thisModal = $(this).closest('.ui-dialog-content');
@@ -246,6 +270,7 @@ if(!$cropHeight) {
                  <?php } else { ?>
                  image_url: '',
                  <?php } ?>
+                 description: '<?php echo str_replace(array("\t", "\r", "\n"), "", addslashes(h($item['description']))); ?>',
                  sort_order: '<?=$item['sortOrder']?>',
                  item_number: '<?=$itemNumber?>',
                  enable_image: <?=$enableImage?>
@@ -259,6 +284,16 @@ if(!$cropHeight) {
      attachFileManagerLaunch($('.repeatable-element-image'));
      doSortCount();
 
+     $(function() {
+         $('.redactor-content').redactor({
+             minHeight: 200,
+             'concrete5': {
+                 filemanager: <?=$fp->canAccessFileManager();?>,
+                 sitemap: <?=$tp->canAccessSitemap();?>,
+                 lightbox: true
+             }
+         });
+     });
  });
 
     //Extra functionalities
@@ -418,5 +453,8 @@ if(!$cropHeight) {
  }
  .option-button {
      margin-left: 10px !important;
+ }
+ .redactor_editor {
+     padding: 20px;
  }
 </style>

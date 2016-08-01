@@ -12,12 +12,12 @@ class Controller extends Package
 
     public function getPackageName()
     {
-        return t('Repeatable Item Template');
+        return t('Repeatable Element');
     }
 
     public function getPackageDescription()
     {
-        return t('Starter package for making a block with repeatable items');
+        return t('Installs the Repeatable Items block for creating blocks that contain various types of repeatable items for different scenarios.');
     }
 
     public function install()

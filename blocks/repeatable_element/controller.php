@@ -4,6 +4,7 @@ namespace Concrete\Package\RepeatableElement\Block\RepeatableElement;
 use Concrete\Core\Block\BlockController;
 use Database;
 use Page;
+use Concrete\Core\Editor\LinkAbstractor;
 use Core;
 
 class Controller extends BlockController
@@ -22,12 +23,14 @@ class Controller extends BlockController
 
     public function getBlockTypeDescription()
     {
-        return t('Repeatable Dynamic Items Starter Block');
+        return t('Create blocks containing repeatable elements for different uses, such as slideshows or multi-location maps.');
     }
 
     public function add()
     {
         $this->requireAsset('core/file-manager');
+        $this->requireAsset('core/sitemap');
+        $this->requireAsset('redactor');
 
         if(!$this->displayTitle) {
             $displayTitle = 1;
@@ -38,6 +41,8 @@ class Controller extends BlockController
     public function edit()
     {
         $this->requireAsset('core/file-manager');
+        $this->requireAsset('core/sitemap');
+        $this->requireAsset('redactor');
         $db = Database::connection();
         $q = 'SELECT * from btRepeatableItem WHERE bID = ? ORDER BY sortOrder';
         $query = $db->fetchAll($q, array($this->bID));
@@ -65,6 +70,7 @@ class Controller extends BlockController
         $items = array();
         foreach ($rows as $row) {
             $items[] = $row;
+            $row['description'] = LinkAbstractor::translateFrom($row['description']);
         }
 
         return $items;
@@ -85,12 +91,16 @@ class Controller extends BlockController
             $i = 0;
 
             while ($i < $count) {
-                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, sortOrder) values(?,?,?,?)';
+                if(isset($data['description'][$i])) {
+                    $data['description'][$i] = LinkAbstractor::translateTo($data['description'][$i]);
+                }
+                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, description, sortOrder) values(?,?,?,?,?)';
                 $db->executeQuery($q,
                     array(
                         $this->bID,
                         intval($data['fID'][$i]),
                         $data['title'][$i],
+                        $data['description'][$i],
                         $data['sortOrder'][$i],
                     )
                 );
