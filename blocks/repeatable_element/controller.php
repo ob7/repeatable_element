@@ -104,7 +104,9 @@ class Controller extends BlockController
 
     public function on_start()
     {
-        $this->requireAsset('cycle2');
+        if($this->enableSlideshow > 0) {
+            $this->requireAsset('cycle2');
+        }
     }
 
 
@@ -114,6 +116,7 @@ class Controller extends BlockController
         $data['enableImage'] = intval($data['enableImage']);
         $data['cropImage'] = intval($data['cropImage']);
         $data['crop'] = intval($data['crop']);
+        $data['enableSlideshow'] = intval($data['enableSlideshow']);
         $db = Database::connection();
         $q = 'DELETE from btRepeatableItem WHERE bID = ?';
         $db->executeQuery($q, array($this->bID));

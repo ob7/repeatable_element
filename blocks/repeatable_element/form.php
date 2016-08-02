@@ -77,6 +77,14 @@ if(!$cropHeight) {
             </div>
         </div>
     </div>
+
+    <label class="control-label"><?=t('Enable Slideshow?');?></label>
+    <div class="option-box" data-option=".enable-image">
+        <select class="form-control top-option" name="enableSlideshow" id="toggleSlideshow">
+            <option <?=$enableSlideshow == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
+            <option <?=$enableSlideshow == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
+        </select>
+    </div>
 </div>
 <script>
  $('.option-box select.top-option').click(function() {

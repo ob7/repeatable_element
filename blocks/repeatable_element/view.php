@@ -12,9 +12,10 @@ if ($c->isEditMode()) { ?>
         <div style="padding: 40px 0px 40px 0px"><?php echo t('Repeatable Element view disabled in edit mode.')?></div>
     </div>
 <?php } else { ?>
-    <div class="repeatable-element-container cycle-slideshow-container">
+    <div class="repeatable-element-container <?=$enableSlideshow > 0 ? 'cycle-slideshow-container' : ''?>">
         <?php if(count($items) > 0) { ?>
-            <ul class="cycle-slideshow"
+            <ul
+                class="repeatable-list <?=$enableSlideshow > 0 ? 'cycle-slideshow' : 'menu-list'?>"
                 data-cycle-slides="li"
                 data-cycle-pager=".pager"
                 data-cycle-auto-height="container"
@@ -23,6 +24,7 @@ if ($c->isEditMode()) { ?>
                 <?php } ?>
             >
             <?php foreach($items as $item) {?>
+                <?php if ($enableSlideshow > 0) {?>
                 <li>
                     <div class="content">
                         <div class="container">
@@ -71,6 +73,41 @@ if ($c->isEditMode()) { ?>
                         </div>
                     </div>
                 </li>
+                <?php } else {?>
+                <li>
+                    <?php if ($item['linkURL']) {?>
+                        <a href="<?=$item['linkURL'] ?>" class="mega-link-overlay">
+                    <?php } ?>
+                    <?php if ($item['fID']) {?>
+                    <div class="image">
+                        <?php
+                        $f = File::getByID($item['fID']);
+                        if (is_object($f) && $enableImage == 1) {
+                            if ($cropImage == 1) {
+                                $width = $cropWidth;
+                                $height = $cropHeight;
+                                $crop = $crop;
+                                $image = $ih->getThumbnail($f, $width, $height, $crop);
+                                echo '<img src="' . $image->src . '">';
+                            } else if ($cropImage == 0) {
+                                $tag = Core::make('html/image', array($f, false))->getTag();
+                                echo $tag;
+                            }
+                        }
+                        ?>
+                    </div>
+                    <?php } ?>
+                    <?php if($item['title']) {?>
+                        <h4>
+                            <?=$item['title']?>
+                        </h4>
+                    <?php } ?>
+
+                    <?php if ($item['linkURL']) {?>
+                                </a>
+                    <?php } ?>
+                </li>
+                <?php } ?>
             <?php } ?>
             </ul>
         <?php } else { ?>
