@@ -151,6 +151,25 @@ if(!$cropHeight) {
                 </div>
             </div>
 
+            <!-- Link -->
+            <div class="form-group">
+                <label><?=t('Link');?></label>
+                link type is <%=link_type%>
+                <select name="linkType[]" class="form-control" data-field="entry-link-select">
+                    <option <%if (!link_type) {%>selected<% }%> value="0"><?=t('None')?></option>
+                    <option <%if (link_type == 1) {%>selected<% }%> value="1"><?=t('Another Page')?></option>
+                    <option <%if (link_type == 2) {%>selected<% }%> value="2"><?=t('External Link')?></option>
+                </select>
+            </div>
+            <div data-field="entry-link-url" class="form-group hide-slide-link">
+                <label><?=t('URL:')?></label>
+                <textarea name="linkURL[]"><%=link_url%></textarea>
+            </div>
+            <div data-field="entry-link-page-selector" class="form-group hide-slide-link">
+                <label><?=t('Choose Page:')?></label>
+                <div data-field="entry-link-page-selector-select"></div>
+            </div>
+
             <!--Sort Order-->
             <input class="repeatable-element-entry-sort" name="<?=$view->field('sortOrder');?>[]" type="hidden" value="<%=sort_order%>"/>
         </div>
@@ -175,6 +194,9 @@ if(!$cropHeight) {
              title: '',
              fID: '',
              image_url: '',
+             link_url: '',
+             cID: '',
+             link_type: 0,
              description: '',
              sort_order: '',
              item_number: currentEntries,
@@ -209,6 +231,10 @@ if(!$cropHeight) {
          // Ensure edit all button is toggled to original state
          var editAll = $('.edit-all-items');
          editAll.text(editAll.data('expandText'));
+
+         newSlide.find('div[data-field=entry-link-page-selector-select]').concretePageSelector({
+             'inputName': 'internalLinkCID[]'
+         });
 
          doSortCount();
      });
@@ -255,6 +281,25 @@ if(!$cropHeight) {
          });
      };
 
+     entriesContainer.on('change', 'select[data-field=entry-link-select]', function() {
+         var container = $(this).closest('.repeatable-element-entry');
+         switch (parseInt($(this).val())) {
+             case 2:
+                 container.find('div[data-field=entry-link-page-selector]').addClass('hide-slide-link').removeClass('show-slide-link');
+                 container.find('div[data-field=entry-link-url]').addClass('show-slide-link').removeClass('hide-slide-link');
+                 break;
+             case 1:
+                 container.find('div[data-field=entry-link-url]').addClass('hide-slide-link').removeClass('show-slide-link');
+                 container.find('div[data-field=entry-link-page-selector]').addClass('show-slide-link').removeClass('hide-slide-link');
+                 break;
+             default:
+                 container.find('div[data-field=entry-link-page-selector]').addClass('hide-slide-link').removeClass('show-slide-link');
+                 container.find('div[data-field=entry-link-url]').addClass('hide-slide-link').removeClass('show-slide-link');
+                 break;
+         }
+     });
+
+
      // Edit item button
      $('.repeatable-element-entries').on('click','.edit-repeatable-element-entry', function() {
          $(this).closest('.repeatable-element-entry').toggleClass('item-closed');
@@ -269,7 +314,16 @@ if(!$cropHeight) {
      // Initial load up of already saved items
      <?php if($items) {
          $itemNumber = 1;
-         foreach ($items as $item) { ?>
+         foreach ($items as $item) { 
+
+            $linkType = 0;
+            if ($item['linkURL']) {
+                $linkType = 2;
+            } else if ($item['internalLinkCID']) {
+                $linkType = 1;
+            }
+            ?>
+
              entriesContainer.append(entriesTemplate({
                  title: '<?=$item['title']?>',
                  fID: '<?=$item['fID']?>',
@@ -278,11 +332,18 @@ if(!$cropHeight) {
                  <?php } else { ?>
                  image_url: '',
                  <?php } ?>
+                 link_url: '<?=$item['linkURL']; ?>',
+                 link_type: '<?=$linkType?>',
+
                  description: '<?php echo str_replace(array("\t", "\r", "\n"), "", addslashes(h($item['description']))); ?>',
                  sort_order: '<?=$item['sortOrder']?>',
                  item_number: '<?=$itemNumber?>',
                  enable_image: <?=$enableImage?>
              }));
+            entriesContainer.find('.repeatable-element-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
+                'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) { ?><?php echo intval($item['internalLinkCID']); ?><?php } else { ?>false<?php } ?>
+            });
+
         <?php
             ++$itemNumber;
         }
@@ -290,6 +351,7 @@ if(!$cropHeight) {
 
      attachDelete($('.remove-repeatable-element-entry'));
      attachFileManagerLaunch($('.repeatable-element-image'));
+     entriesContainer.find('select[data-field=entry-link-select]').trigger('change');
      doSortCount();
 
      $(function() {
@@ -465,4 +527,17 @@ if(!$cropHeight) {
  .redactor_editor {
      padding: 20px;
  }
+.repeatable-element-entry .show-slide-link {
+    display: block;
+}
+.repeatable-element-entry .hide-slide-link {
+    display: none;
+}
+
+.repeatable-element-entry input[type="text"],
+.repeatable-element-entry textarea {
+    display: block;
+    width: 100%;
+}
+
 </style>

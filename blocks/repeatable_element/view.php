@@ -26,8 +26,12 @@ if ($c->isEditMode()) { ?>
                 <li>
                     <div class="content">
                         <div class="container">
+
                             <div class="row">
                                 <div class="col-xs-12 col-lg-6">
+                            <?php if ($item['linkURL']) {?>
+                                <a href="<?=$item['linkURL'] ?>" class="mega-link-overlay">
+                            <?php } ?>
                                     <div class="image">
                                         <?php
                                         $f = File::getByID($item['fID']);
@@ -43,8 +47,11 @@ if ($c->isEditMode()) { ?>
                                                 echo $tag;
                                             }
                                         }
-                                ?>
-                            </div>
+                                        ?>
+                                    </div>
+                            <?php if ($item['linkURL']) {?>
+                                </a>
+                            <?php } ?>
                                 </div>
                                 <div class="col-xs-12 col-lg-6">
                                     <?php if($item['title'] && $displayTitle == 1) { ?>

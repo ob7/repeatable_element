@@ -90,8 +90,13 @@ class Controller extends BlockController
         $rows = $db->fetchAll($q, array($this->bID));
         $items = array();
         foreach ($rows as $row) {
-            $items[] = $row;
+            if(!$row['linkURL'] && $row['internalLinkCID']) {
+                $c = Page::getByID($row['internalLinkCID'], 'ACTIVE');
+                $row['linkURL'] = $c->getCollectionLink();
+                $row['linkPage'] = $c;
+            }
             $row['description'] = LinkAbstractor::translateFrom($row['description']);
+            $items[] = $row;
         }
 
         return $items;
@@ -118,15 +123,31 @@ class Controller extends BlockController
             $i = 0;
 
             while ($i < $count) {
+                $linkURL = $data['linkURL'][$i];
+                $internalLinkCID = $data['internalLinkCID'][$i];
+                switch (intval($data['linkType'][$i])) {
+                    case 1:
+                        $linkURL = '';
+                        break;
+                    case 2:
+                        $internalLinkCID = 0;
+                        break;
+                    default:
+                        $linkURL = '';
+                        $internalLinkCID = 0;
+                        break;
+                }
                 if(isset($data['description'][$i])) {
                     $data['description'][$i] = LinkAbstractor::translateTo($data['description'][$i]);
                 }
-                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, description, sortOrder) values(?,?,?,?,?)';
+                $q = 'INSERT INTO btRepeatableItem (bID, fID, title, linkURL, internalLinkCID, description, sortOrder) values(?,?,?,?,?,?,?)';
                 $db->executeQuery($q,
                     array(
                         $this->bID,
                         intval($data['fID'][$i]),
                         $data['title'][$i],
+                        $linkURL,
+                        $internalLinkCID,
                         $data['description'][$i],
                         $data['sortOrder'][$i],
                     )
