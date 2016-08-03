@@ -65,6 +65,7 @@
     <field name="state" type="string"/>
     <field name="zip" type="string"/>
     <field name="country" type="string"/>
+    <field name="locationLink" type="string"/>
 
 	<field name="lat" type="string">
 		<unsigned/>

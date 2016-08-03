@@ -40,9 +40,17 @@ class Controller extends Package
 			'javascript', 'gmapsjs', 'blocks/repeatable_element/vendor/hpneo/gmaps.js', array(), 'repeatable_element'
 		);
 
+		$al->register(
+			'css', 'locationsStyle', 'blocks/repeatable_element/layouts/locations/layout.css', array(), 'repeatable_element'
+		);
+
 		$al->registerGroup('googleMapsAPI',array(
-			array('javascript','googleMapsAPI'),
 			array('javascript','gmapsjs'),
+			array('javascript','googleMapsAPI'),
+		));
+
+		$al->registerGroup('locationsStyle',array(
+			array('css','locationsStyle'),
 		));
 	}
 

@@ -181,6 +181,10 @@ if(!$cropHeight) {
                     <input name="<?=$view->field('lat')?>[]" type="hidden" value="<%=lat%>"/>
                     <input name="<?=$view->field('lng')?>[]" type="hidden" value="<%=lat%>"/>
                 </div>
+                <div class="form-group">
+                    <label><?=t('Marker Link')?></label>
+                    <input class="form-control" name="<?=$view->field('locationLink')?>[]" type="text" value="<%=location_link%>"/>
+                </div>
             </div>
             <!--Sort Order-->
             <input class="repeatable-element-entry-sort" name="<?=$view->field('sortOrder');?>[]" type="hidden" value="<%=sort_order%>"/>
@@ -212,9 +216,10 @@ if(!$cropHeight) {
              city: '',
              state: '',
              zip: '',
-            country: '',
-            enable_locations: location_enable,
-            display_title: title_display,
+             country: '',
+             location_link: '',
+             enable_locations: location_enable,
+             display_title: title_display,
              lat: '',
             lng: '',
          }));
@@ -317,10 +322,11 @@ if(!$cropHeight) {
                  city: '<?=$item['city']?>',
                  state: '<?=$item['state']?>',
                  zip: '<?=$item['zip']?>',
-				 country: '<?=$item['country']?>',
-				 display_title: <?=$displayTitle?>,
-				 lat: '<?=$item['lat']?>',
-				 lng: '<?=$item['lng']?>'
+                 country: '<?=$item['country']?>',
+                 location_link: '<?=$item['locationLink']?>',
+                 display_title: <?=$displayTitle?>,
+                 lat: '<?=$item['lat']?>',
+                 lng: '<?=$item['lng']?>'
              }));
         <?php
             ++$itemNumber;
