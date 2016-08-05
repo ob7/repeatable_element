@@ -47,3 +47,12 @@
 <h5>
 	Check out the different branches for more features.
 </h5>
+<h3>
+	Images
+</h3>
+<p>
+	In Progress:
+</p>
+<ul>
+	<li>Add ability to clear an image out (currently once image is selected you can replace but not remove the linked image, you can ofcourse disabled images in options but that just disables it from being viewed, but its still there).</li>
+</ul>
