@@ -41,6 +41,9 @@
 <p>Its aimed at developers.</p>
 <p>I'd like to add a third tab for choosing preset layouts for the view.</p>
 <p>The idea is to use one block to build most on page elements found within a web design.  The agency I work for has great graphic designs constantly putting together very nice designs, but the functionality typically remains the same.  A block like this will save tremendous time if implemented correctly.</p>
+<h4>
+	Currently styles may conflict with new C5.8 styles, that will also be addresed in the near future.
+</h4>
 <h5>
 	Check out the different branches for more features.
 </h5>

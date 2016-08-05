@@ -301,6 +301,16 @@ if(!$cropHeight) {
              'inputName': 'internalLinkCID[]'
          });
 
+         // Initiate new items redactor
+         newSlide.find('.redactor-content').redactor({
+             minHeight: 200,
+             'concrete5': {
+                 filemanager: <?=$fp->canAccessFileManager();?>,
+                 sitemap: <?=$tp->canAccessSitemap();?>,
+                 lightbox: true
+             }
+         });
+
          doSortCount();
      });
 
