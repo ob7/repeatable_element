@@ -1,5 +1,9 @@
 <?php defined('C5_EXECUTE') or die("Access Denied.");
 
+$fp = FilePermissions::getGlobal();
+$tp = new TaskPermission();
+$al = Core::make('helper/concrete/asset_library');
+
 echo Core::make('helper/concrete/ui')->tabs(array(
     array('items', t('Items'), true),
     array('options', t('Options')),
@@ -36,6 +40,12 @@ if(!$cropHeight) {
             <option <?=$displayTitle == 1 ? 'selected' : '';?> value="1"><?=t('Yes')?></option>
         </select>
     </div>
+    <label class="control-label"><?=t('Static Image');?></label>
+    <div class="option-box" data-option=".static-image">
+        <div class="form-group">
+            <?=$al->image('ccm-b-image', 'sfID', t('Choose Image'), $bf);?>
+        </div>
+    </div>
     <label class="control-label"><?=t('Enable Images?');?></label>
     <div class="option-box" data-option=".enable-image">
         <div class="option-box-row">
@@ -66,6 +76,13 @@ if(!$cropHeight) {
                 </select>
             </div>
         </div>
+    </div>
+    <label class="control-label"><?=t('Enable Slideshow?');?></label>
+    <div class="option-box" data-option=".enable-image">
+        <select class="form-control top-option" name="enableSlideshow" id="toggleSlideshow">
+            <option <?=$enableSlideshow == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
+            <option <?=$enableSlideshow == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
+        </select>
     </div>
     <div class="option-box" data-option=".location-item-form">
         <label class="control-label"><?=t('Enable Locations?');?></label>
@@ -151,6 +168,16 @@ if(!$cropHeight) {
                     <input class="form-control" name="<?=$view->field('title'); ?>[]" type="text" value="<%=title%>" />
                 </div>
             </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label><?=t('Description');?></label>
+                <div class="redactor-edit-content">
+                    <textarea style="display: none;" class="redactor-content" name="<?=$view->field('description');?>[]"><%=description%></textarea>
+                </div>
+            </div>
+
+            <!-- Locations -->
             <div style="<%=enable_locations > 0 ? '' : 'display: none;'%>" data-option="location" class="item-data-area location-item-form">
                 <label class="control-label"><?=t('Location')?></label>
                 <hr/>
@@ -186,6 +213,25 @@ if(!$cropHeight) {
                     <input class="form-control" name="<?=$view->field('locationLink')?>[]" type="text" value="<%=location_link%>"/>
                 </div>
             </div>
+
+            <!-- Link -->
+            <div class="form-group">
+                <label><?=t('Link');?></label>
+                <select name="linkType[]" class="form-control" data-field="entry-link-select">
+                    <option <%if (!link_type) {%>selected<% }%> value="0"><?=t('None')?></option>
+                    <option <%if (link_type == 1) {%>selected<% }%> value="1"><?=t('Another Page')?></option>
+                    <option <%if (link_type == 2) {%>selected<% }%> value="2"><?=t('External Link')?></option>
+                </select>
+            </div>
+            <div data-field="entry-link-url" class="form-group hide-slide-link">
+                <label><?=t('URL:')?></label>
+                <textarea name="linkURL[]"><%=link_url%></textarea>
+            </div>
+            <div data-field="entry-link-page-selector" class="form-group hide-slide-link">
+                <label><?=t('Choose Page:')?></label>
+                <div data-field="entry-link-page-selector-select"></div>
+            </div>
+
             <!--Sort Order-->
             <input class="repeatable-element-entry-sort" name="<?=$view->field('sortOrder');?>[]" type="hidden" value="<%=sort_order%>"/>
         </div>
@@ -198,6 +244,7 @@ if(!$cropHeight) {
 <!--FORM FUNCTIONALITY-->
 <script>
  $(document).ready(function() {
+     var ccmReceivingEntry = '';
      var entriesContainer = $('.repeatable-element-entries');
      var entriesTemplate = _.template($('#entryTemplate').html());
 
@@ -221,7 +268,11 @@ if(!$cropHeight) {
              enable_locations: location_enable,
              display_title: title_display,
              lat: '',
-            lng: '',
+             lng: '',
+             link_url: '',
+             cID: '',
+             link_type: 0,
+             description: '',
          }));
 
          var newSlide = $('.repeatable-element-entry').last();
@@ -244,6 +295,11 @@ if(!$cropHeight) {
          // Ensure edit all button is toggled to original state
          var editAll = $('.edit-all-items');
          editAll.text(editAll.data('expandText'));
+
+         // Initiate Link Page Selector
+         newSlide.find('div[data-field=entry-link-page-selector-select]').concretePageSelector({
+             'inputName': 'internalLinkCID[]'
+         });
 
          doSortCount();
      });
@@ -301,10 +357,36 @@ if(!$cropHeight) {
          }
      });
 
+     // Update link type
+     entriesContainer.on('change', 'select[data-field=entry-link-select]', function() {
+         var container = $(this).closest('.repeatable-element-entry');
+         switch (parseInt($(this).val())) {
+             case 2:
+                 container.find('div[data-field=entry-link-page-selector]').addClass('hide-slide-link').removeClass('show-slide-link');
+                 container.find('div[data-field=entry-link-url]').addClass('show-slide-link').removeClass('hide-slide-link');
+                 break;
+             case 1:
+                 container.find('div[data-field=entry-link-url]').addClass('hide-slide-link').removeClass('show-slide-link');
+                 container.find('div[data-field=entry-link-page-selector]').addClass('show-slide-link').removeClass('hide-slide-link');
+                 break;
+             default:
+                 container.find('div[data-field=entry-link-page-selector]').addClass('hide-slide-link').removeClass('show-slide-link');
+                 container.find('div[data-field=entry-link-url]').addClass('hide-slide-link').removeClass('show-slide-link');
+                 break;
+         }
+     });
+
      // Initial load up of already saved items
      <?php if($items) {
          $itemNumber = 1;
-         foreach ($items as $item) { ?>
+         foreach ($items as $item) {
+             $linkType = 0;
+             if ($item['linkURL']) {
+                 $linkType = 2;
+             } else if ($item['internalLinkCID']) {
+                 $linkType = 1;
+             }
+     ?>
              entriesContainer.append(entriesTemplate({
                  title: '<?=$item['title']?>',
                  fID: '<?=$item['fID']?>',
@@ -313,6 +395,10 @@ if(!$cropHeight) {
                  <?php } else { ?>
                  image_url: '',
                  <?php } ?>
+                 link_url: '<?=$item['linkURL']; ?>',
+                 link_type: '<?=$linkType?>',
+                 description: '<?php echo str_replace(array("\t", "\r", "\n"), "", addslashes(h($item['description']))); ?>',
+
                  sort_order: '<?=$item['sortOrder']?>',
                  item_number: '<?=$itemNumber?>',
                  enable_image: <?=$enableImage?>,
@@ -328,6 +414,11 @@ if(!$cropHeight) {
                  lat: '<?=$item['lat']?>',
                  lng: '<?=$item['lng']?>'
              }));
+            // Append page selector
+            entriesContainer.find('.repeatable-element-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
+                'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) { ?><?php echo intval($item['internalLinkCID']); ?><?php } else { ?>false<?php } ?>
+            });
+
         <?php
             ++$itemNumber;
         }
@@ -335,7 +426,20 @@ if(!$cropHeight) {
 
      attachDelete($('.remove-repeatable-element-entry'));
      attachFileManagerLaunch($('.repeatable-element-image'));
+     entriesContainer.find('select[data-field=entry-link-select]').trigger('change');
      doSortCount();
+
+     // Initialize redactors for descriptions
+     $(function() {
+         $('.redactor-content').redactor({
+             minHeight: 200,
+             'concrete5': {
+                 filemanager: <?=$fp->canAccessFileManager();?>,
+                 sitemap: <?=$tp->canAccessSitemap();?>,
+                 lightbox: true
+             }
+         });
+     });
 
  });
 
@@ -531,6 +635,21 @@ if(!$cropHeight) {
  }
  .option-button {
      margin-left: 10px !important;
+ }
+ .redactor_editor {
+     padding: 20px;
+ }
+ .repeatable-element-entry .show-slide-link {
+     display: block;
+ }
+ .repeatable-element-entry .hide-slide-link {
+     display: none;
+ }
+
+ .repeatable-element-entry input[type="text"],
+ .repeatable-element-entry textarea {
+     display: block;
+     width: 100%;
  }
  .layout-item {
      padding: 16px;

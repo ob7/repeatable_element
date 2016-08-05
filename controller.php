@@ -29,29 +29,37 @@ class Controller extends Package
         }
     }
 
-	public function on_start()
-	{
-		$al = \Concrete\Core\Asset\AssetList::getInstance();
-		$al->register(
-		'javascript', 'googleMapsAPI', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC_eOliAR35peqAtdN6NquzIMQinPqwx5Q&callback=initMap', array('local' => false)
-		);
+    public function on_start()
+    {
+        $al = \Concrete\Core\Asset\AssetList::getInstance();
+        $al->register(
+            'javascript', 'googleMapsAPI', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC_eOliAR35peqAtdN6NquzIMQinPqwx5Q&callback=initMap', array('local' => false)
+        );
 
-		$al->register(
-			'javascript', 'gmapsjs', 'blocks/repeatable_element/vendor/hpneo/gmaps.js', array(), 'repeatable_element'
-		);
+        $al->register(
+            'javascript', 'gmapsjs', 'blocks/repeatable_element/vendor/hpneo/gmaps.js', array(), 'repeatable_element'
+        );
 
-		$al->register(
-			'css', 'locationsStyle', 'blocks/repeatable_element/layouts/locations/layout.css', array(), 'repeatable_element'
-		);
+        $al->register(
+            'css', 'locationsStyle', 'blocks/repeatable_element/layouts/locations/layout.css', array(), 'repeatable_element'
+        );
 
-		$al->registerGroup('googleMapsAPI',array(
-			array('javascript','gmapsjs'),
-			array('javascript','googleMapsAPI'),
-		));
+        $al->registerGroup('googleMapsAPI',array(
+            array('javascript','gmapsjs'),
+            array('javascript','googleMapsAPI'),
+        ));
 
-		$al->registerGroup('locationsStyle',array(
-			array('css','locationsStyle'),
-		));
-	}
+        $al->registerGroup('locationsStyle',array(
+            array('css','locationsStyle'),
+        ));
 
+        $al->register(
+            'javascript', 'cycle2', 'https://malsup.github.io/min/jquery.cycle2.min.js', array('local' => false)
+        );
+
+        $al->registerGroup('cycle2',array(
+            array('javascript','cycle2'),
+		    ));
+
+	  }
 }

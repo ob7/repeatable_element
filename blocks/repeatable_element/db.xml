@@ -73,8 +73,8 @@
       <unsigned/>
       <default value="0"/>
     </field>
+    <field name="description" type="text"/>
     <field name="sortOrder" type="integer"/>
-
     <field name="addressLine1" type="text"/>
     <field name="addressLine2" type="text"/>
     <field name="city" type="string"/>
