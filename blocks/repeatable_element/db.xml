@@ -12,6 +12,10 @@
       <unsigned/>
       <default value="0"/>
     </field>
+    <field name="enableSlideshow" type="integer">
+      <unsigned/>
+      <default value="0"/>
+    </field>
     <field name="cropImage" type="integer">
       <unsigned/>
       <default value="0"/>
@@ -34,7 +38,10 @@
       <default value="1"/>
       <notnull/>
     </field>
-
+    <field name="sfID" type="integer">
+      <unsigned/>
+      <default value="0"/>
+    </field>
     <field name="enableLocations" type="integer">
       <unsigned/>
       <default value="0"/>
@@ -56,7 +63,16 @@
       <unsigned/>
       <default value="0"/>
     </field>
+    <field name="cID" type="integer">
+      <unsigned/>
+      <default value="0"/>
+    </field>
     <field name="title" type="text"/>
+    <field name="linkURL" type="string" size="255"/>
+    <field name="internalLinkCID" type="integer">
+      <unsigned/>
+      <default value="0"/>
+    </field>
     <field name="sortOrder" type="integer"/>
 
     <field name="addressLine1" type="text"/>
