@@ -30,6 +30,8 @@
 		Static image present on all slides (such as a static background image while repeatable elements display ontop)
 	</li>
 </ul>
+<hr>
+<p>On the way:</p>
 <ul>
 	<li>
 		More enablable options, layouts, better organization.
