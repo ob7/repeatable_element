@@ -90,6 +90,9 @@ class Controller extends BlockController
         if($this->enableSlideshow > 0) {
             $this->requireAsset('cycle2');
         }
+        if($this->enableHamburger == 'yes') {
+            $this->requireAsset('hamburgerMenu');
+        }
 	  }
 
     public function delete()

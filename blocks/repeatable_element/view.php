@@ -125,9 +125,33 @@ if ($c->isEditMode()) { ?>
 		</script>
 	</div>
 	<? } else { ?>
-    <div class="repeatable-element-container <?=$enableSlideshow > 0 ? 'cycle-slideshow-container' : ''?>">
+    <?if($enableHamburger == 'yes'){?>
+    <div class="hamburger-menu">
+    <div class="hamburger-icons-container">
+        <div class="hamburger-icons">
+        <div class="hamburger-close-icon">
+            <div class="icon-close">
+            </div>
+        </div>
+        <div class="hamburger-menu-icon">
+            <div class="icon-menu">
+            </div>
+            <div class="title">
+            Menu
+            </div>
+        </div>
+        </div>
+    </div>
+    <?}?>
+
+    <?if($enableHamburger == 'no'){?>
+    <div class="repeatable-element-container <?=$enableHamburger > 0 ? 'hamburger-menu' : ''?> <?=$enableSlideshow > 0 ? 'cycle-slideshow-container' : ''?>">
+    <?php } ?>
         <?php if(count($items) > 0) { ?>
             <ul
+                <?php if ($enableHamburger == 'yes' && $enableLinks > 0){?>
+                class="nav"
+                <?php } else { ?>
                 class="repeatable-list <?=$enableSlideshow > 0 ? 'cycle-slideshow' : 'menu-list'?>"
                 <?php if($enableSlideshow > 0) {?>
                 data-cycle-slides="li"
@@ -136,6 +160,7 @@ if ($c->isEditMode()) { ?>
                 <?php } ?>
                 <?php if($image) {?>
                 style="background-image: url('<?=$image->src?>');"
+                <?php } ?>
                 <?php } ?>
             >
             <?php foreach($items as $item) {?>
