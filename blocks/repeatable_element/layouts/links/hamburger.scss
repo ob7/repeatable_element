@@ -1,0 +1,123 @@
+$lg-breakpoint: 992px;
+$green: #79c5b8;
+$darkGreen: #008e84;
+$red: #c8202c;
+$blue: #1F4182;
+@import url('vendor/icomoon/style.css');
+.hamburger-icons-container {
+	display: none;
+}
+.hamburger-menu {
+    ul {
+        @media only screen and (min-width: $lg-breakpoint) {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-around;
+        }
+        li {
+            margin-top: 16px;
+            a {
+                color: #FFF;
+                background: $green;
+                padding: 16px;
+                font-weight: 600;
+                min-width: 280px;
+                display: block;
+                text-align: center;
+                border-radius: 60px;
+                text-transform: uppercase;
+                @media only screen and (min-width: $lg-breakpoint) {
+                    font-size: 32px;
+                    padding: 24px 24px 18px;
+                }
+                &:hover {
+                    background: $darkGreen;
+                }
+            }
+            ul {
+                li {
+                    a {
+                        &:hover {
+                        }
+                    }
+                }
+            }
+        }
+    }
+	@media only screen and (min-width: $lg-breakpoint) {
+		.hamburger-icons-container {
+			display: flex;
+			justify-content: flex-end;
+		}
+		.hamburger-icons {
+			position: relative;
+			font-size: 64px;
+			display: inline-block;
+		}
+		.hamburger-close-icon {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: $green;
+			border-radius: 16px;
+			border: 3px solid transparent;
+			z-index: 2;
+			opacity: 0;
+			transition: opacity .25s ease-in-out;
+			pointer-events: none;
+			cursor: hand;
+			cursor: pointer;
+			&.active {
+				opacity: 1;
+			}
+		}
+		.hamburger-menu-icon {
+			border-radius: 16px;
+			position: relative;
+			z-index: 1;
+			.title {
+				font-size: 14px;
+				text-transform: uppercase;
+				font-weight: bold;
+				display: block;
+				text-align: center;
+				cursor: default;
+				margin-top: -16px;-webkit-user-select: none;  
+				-moz-user-select: none;    
+				-ms-user-select: none;      
+				user-select: none;
+			}
+			.icon-menu {
+				margin-top: -8px;
+			}
+			background: transparent;
+			border: 3px solid transparent;
+			transition: all .25s ease-in-out;
+			&.active,&:hover {
+				cursor: hand;
+				cursor: pointer;
+				background: $red;
+				border: 3px solid $green;
+				.title {
+					cursor: pointer;
+					cursor: hand;
+				}
+			}
+		}
+		ul.nav {
+			max-height: 0;
+			overflow: hidden;
+			transition: all .5s ease-in-out;
+		}
+	}
+	&.active {
+		ul.nav {
+			max-height: 700px;
+		}
+	}
+}
+
