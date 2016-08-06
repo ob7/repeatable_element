@@ -190,7 +190,7 @@ if ($c->isEditMode()) { ?>
                 </li>
                 <?php } else {?>
                 <li>
-                    <?php if ($item['linkURL']) {?>
+                    <?php if ($item['linkURL'] && $enableLinks > 0) {?>
                         <a href="<?=$item['linkURL'] ?>" class="mega-link-overlay">
                     <?php } ?>
                     <?php if ($item['fID']) {?>

@@ -46,6 +46,10 @@
       <unsigned/>
       <default value="0"/>
     </field>
+    <field name="enableLinks" type="integer">
+      <unsigned/>
+      <default value="0"/>
+    </field>
 
 	<field name="layoutLocations" type="string"/>
   </table>

@@ -84,6 +84,13 @@ if(!$cropHeight) {
             <option <?=$enableSlideshow == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
         </select>
     </div>
+    <label class="control-label"><?=t('Enable Links?');?></label>
+    <div class="option-box" data-option=".links-form">
+        <select class="form-control top-option" name="enableLinks" id="toggleLinks">
+            <option <?=$enableLinks == 0 ? 'selected' : ''?> value="0"><?=t('No')?></option>
+            <option <?=$enableLinks == 1 ? 'selected' : ''?> value="1"><?=t('Yes')?></option>
+        </select>
+    </div>
     <div class="option-box" data-option=".location-item-form">
         <label class="control-label"><?=t('Enable Locations?');?></label>
         <select id="toggleLocations" class="form-control top-option" name="enableLocations">
@@ -215,21 +222,23 @@ if(!$cropHeight) {
             </div>
 
             <!-- Link -->
-            <div class="form-group">
-                <label><?=t('Link');?></label>
-                <select name="linkType[]" class="form-control" data-field="entry-link-select">
-                    <option <%if (!link_type) {%>selected<% }%> value="0"><?=t('None')?></option>
-                    <option <%if (link_type == 1) {%>selected<% }%> value="1"><?=t('Another Page')?></option>
-                    <option <%if (link_type == 2) {%>selected<% }%> value="2"><?=t('External Link')?></option>
-                </select>
-            </div>
-            <div data-field="entry-link-url" class="form-group hide-slide-link">
-                <label><?=t('URL:')?></label>
-                <textarea name="linkURL[]"><%=link_url%></textarea>
-            </div>
-            <div data-field="entry-link-page-selector" class="form-group hide-slide-link">
-                <label><?=t('Choose Page:')?></label>
-                <div data-field="entry-link-page-selector-select"></div>
+            <div class="links-form" <%=enable_links < 1 ? 'style="display: none;"' : ''%>>
+                <div class="form-group">
+                    <label><?=t('Link');?></label>
+                    <select name="linkType[]" class="form-control" data-field="entry-link-select">
+                        <option <%if (!link_type) {%>selected<% }%> value="0"><?=t('None')?></option>
+                        <option <%if (link_type == 1) {%>selected<% }%> value="1"><?=t('Another Page')?></option>
+                        <option <%if (link_type == 2) {%>selected<% }%> value="2"><?=t('External Link')?></option>
+                    </select>
+                </div>
+                <div data-field="entry-link-url" class="form-group hide-slide-link">
+                    <label><?=t('URL:')?></label>
+                    <textarea name="linkURL[]"><%=link_url%></textarea>
+                </div>
+                <div data-field="entry-link-page-selector" class="form-group hide-slide-link">
+                    <label><?=t('Choose Page:')?></label>
+                    <div data-field="entry-link-page-selector-select"></div>
+                </div>
             </div>
 
             <!--Sort Order-->
@@ -258,6 +267,7 @@ if(!$cropHeight) {
              sort_order: '',
              item_number: currentEntries,
              enable_image: enable_image,
+             enable_links: enable_links,
              address_line1: '',
              address_line2: '',
              city: '',
@@ -412,6 +422,7 @@ if(!$cropHeight) {
                  sort_order: '<?=$item['sortOrder']?>',
                  item_number: '<?=$itemNumber?>',
                  enable_image: <?=$enableImage?>,
+                 enable_links: <?=$enableLinks?>,
                  enable_locations: <?=$enableLocations?>,
                  address_line1: '<?=$item['addressLine1']?>',
                  address_line2: '<?=$item['addressLine2']?>',
@@ -494,6 +505,16 @@ if(!$cropHeight) {
          enable_image = 0;
      } else if (enableImage == 1) {
          enable_image = 1;
+     }
+ });
+// Toggle links
+ $('#toggleLinks').click(function() {
+     var enableLinks = $('#toggleImage option:selected').val();
+     var linksForm = $('.links-form');
+     if (enableLinks == 0) {
+         enable_links = 0;
+     } else if (enableLinks == 1) {
+         enable_links = 1;
      }
  });
 // Toggle title

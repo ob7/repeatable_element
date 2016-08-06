@@ -160,6 +160,7 @@ class Controller extends BlockController
     {
         $data['displayTitle'] = intval($data['displayTitle']);
         $data['enableImage'] = intval($data['enableImage']);
+        $data['enableLinks'] = intval($data['enableLinks']);
         $data['cropImage'] = intval($data['cropImage']);
         $data['crop'] = intval($data['crop']);
         $data['enableSlideshow'] = intval($data['enableSlideshow']);
