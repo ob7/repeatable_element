@@ -1,0 +1,71 @@
+$linkColor: #ffff78;
+$hoverColor: #fff;
+.repeatable-element-container.locations {
+    .map {
+        width: 100%;
+        min-height: 500px;
+    }
+    @media only screen and (min-width: 768px) {
+        display: flex;
+        flex-direction: row;
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        li {
+            display: block;
+            position: relative;
+            min-height: 200px;
+            @media only screen and (min-width: 768px) {
+                max-width: 640px;
+            }
+            .caption {
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(255,255,255,0.3);
+                    opacity: 0;
+                    transition: all .5s ease-in-out;
+                }
+                .caption-content {
+                    position: relative;
+                    z-index: 2;
+                }
+            }
+            &:hover {
+                cursor: hand;
+                cursor: pointer;
+                .caption {
+                    
+                    &::after {
+                        opacity: 1;
+                    }
+                }
+            }
+            img {
+                width: 100%;
+            }
+            .caption {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                text-align: center;
+                width: 100%;
+                padding: 16px;
+                background-color: rgba(0,0,0,0.5);
+                color: #FFF;
+                a {
+                    color: $linkColor;
+                    &:hover {
+                        color: $hoverColor;
+                    }
+                }
+            }
+        }
+    }
+}

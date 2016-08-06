@@ -52,6 +52,7 @@
     </field>
 
 	<field name="layoutLocations" type="string"/>
+	<field name="enableHamburger" type="string"/>
   </table>
 
   <table name="btRepeatableItem">

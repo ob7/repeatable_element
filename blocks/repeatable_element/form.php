@@ -109,6 +109,15 @@ if(!$cropHeight) {
 			<option <?=$layoutLocations == 'left' ? 'selected' : ''?> value="left">Left Layout</option>
 		</select>
 	</div>
+	<div class="links-item">
+		<h4><?=t('Links Layout')?></h4>
+		<hr>
+		<label class="control-label"><?=t('Enable Hamburger Menu?')?></label>
+		<select class="form-control" id="toggleLayoutLinks" name="enableHamburger">
+			<option <?=$enableHamburger == 'no' ? 'selected' : ''?> value="no">No</option>
+			<option <?=$enableHamburger == 'yes' ? 'selected' : ''?> value="yes">Yes</option>
+		</select>
+	</div>
 </div>
 
 <script>
