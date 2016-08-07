@@ -101,6 +101,12 @@ if(!$cropHeight) {
 </div>
 <div class="ccm-tab-content" id="ccm-tab-content-layouts">
 	<div class="layout-item">
+		<h4><?=t('Generic Options')?></h4>
+		<hr>
+		<label class="control-label"><?=t('Custom Container Class')?></label>
+    <input class="form-control" name="customContainerClass" type="text" value="<?=$customContainerClass?>"/>
+	</div>
+	<div class="layout-item">
 		<h4><?=t('Locations Layout')?></h4>
 		<hr>
 		<label class="control-label"><?=t('Location List Position')?></label>
@@ -187,7 +193,7 @@ if(!$cropHeight) {
 
             <!-- Description -->
             <div class="form-group">
-                <label><?=t('Description');?></label>
+                <label><?=t('Content');?></label>
                 <div class="redactor-edit-content">
                     <textarea style="display: none;" class="redactor-content" name="<?=$view->field('description');?>[]"><%=description%></textarea>
                 </div>
@@ -495,6 +501,12 @@ if(!$cropHeight) {
      var enable_image = <?=$enableImage?>;
      <? } else { ?>
      var enable_image = 0;
+     <?php } ?>
+
+     <?php if ($enableLinks) {  ?>
+     var enable_links = <?=$enableLinks?>;
+     <? } else { ?>
+     var enable_links = 0;
      <?php } ?>
 
      <?php if ($displayTitle == 1) {  ?>

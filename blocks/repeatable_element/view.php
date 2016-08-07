@@ -45,6 +45,7 @@ if ($c->isEditMode()) { ?>
 							<?=$item['title']?>
 						</h4>
 						<?php } ?>
+            <?php if ($displayLocationInfoInButton > 0) {?>
 						<p>
 						<?=$item['addressLine1'] ? $item['addressLine1'] . '<br>' : ''?>
 						<?=$item['addressLine2'] ? $item['addressLine2'] . '<br>' : ''?>
@@ -57,7 +58,8 @@ if ($c->isEditMode()) { ?>
 						<?php } ?>
 						<?=$item['country'] ? '<br>' . $item['country'] : ''?>
 						</p>
-            <?php if ($item['locationLink']) {?>
+            <?php } ?>
+            <?php if ($item['locationLink'] && $displayLinkInButton > 0) {?>
             <a href="<?=$item['locationLink']?>" target="_blank">
                 Get Directions
             </a>
@@ -81,7 +83,7 @@ if ($c->isEditMode()) { ?>
              lng: startLng,
              scrollwheel: false,
              draggable: true,
-             zoom: 17,
+             zoom: 12, //add zoom level to map settings instead...
              styles: [{"featureType":"landscape","stylers":[{"hue":"#FFBB00"},{"saturation":43.400000000000006},{"lightness":37.599999999999994},{"gamma":1}]},{"featureType":"road.highway","stylers":[{"hue":"#FFC200"},{"saturation":-61.8},{"lightness":45.599999999999994},{"gamma":1}]},{"featureType":"road.arterial","stylers":[{"hue":"#FF0300"},{"saturation":-100},{"lightness":51.19999999999999},{"gamma":1}]},{"featureType":"road.local","stylers":[{"hue":"#FF0300"},{"saturation":-100},{"lightness":52},{"gamma":1}]},{"featureType":"water","stylers":[{"hue":"#0078FF"},{"saturation":-13.200000000000003},{"lightness":2.4000000000000057},{"gamma":1}]},{"featureType":"poi","stylers":[{"hue":"#00FF6A"},{"saturation":-1.0989010989011234},{"lightness":11.200000000000017},{"gamma":1}]}]
          });
 
@@ -125,7 +127,7 @@ if ($c->isEditMode()) { ?>
 		</script>
 	</div>
 	<? } else { ?>
-    <?if($enableHamburger == 'yes'){?>
+    <?php if($enableHamburger == 'yes'){?>
     <div class="hamburger-menu">
     <div class="hamburger-icons-container">
         <div class="hamburger-icons">
@@ -144,7 +146,7 @@ if ($c->isEditMode()) { ?>
     </div>
     <?}?>
 
-    <?if($enableHamburger == 'no'){?>
+    <?php if($enableHamburger == 'no'){?>
     <div class="repeatable-element-container <?=$enableHamburger > 0 ? 'hamburger-menu' : ''?> <?=$enableSlideshow > 0 ? 'cycle-slideshow-container' : ''?>">
     <?php } ?>
         <?php if(count($items) > 0) { ?>
@@ -152,7 +154,7 @@ if ($c->isEditMode()) { ?>
                 <?php if ($enableHamburger == 'yes' && $enableLinks > 0){?>
                 class="nav"
                 <?php } else { ?>
-                class="repeatable-list <?=$enableSlideshow > 0 ? 'cycle-slideshow' : 'menu-list'?>"
+                class="repeatable-list <?=$customContainerClass ? $customContainerClass : ''?> <?=$enableSlideshow > 0 ? 'cycle-slideshow' : 'menu-list'?>"
                 <?php if($enableSlideshow > 0) {?>
                 data-cycle-slides="li"
                 data-cycle-pager=".pager"

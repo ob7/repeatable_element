@@ -53,6 +53,7 @@
 
 	<field name="layoutLocations" type="string"/>
 	<field name="enableHamburger" type="string"/>
+	<field name="customContainerClass" type="string"/>
   </table>
 
   <table name="btRepeatableItem">
