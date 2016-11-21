@@ -1,3 +1,4 @@
+Currently broken, but theres lots of code examples.
 <h3>
 	Repeatable Elements
 </h3>
